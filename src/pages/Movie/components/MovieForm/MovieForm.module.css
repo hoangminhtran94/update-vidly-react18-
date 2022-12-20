@@ -1,0 +1,14 @@
+.movie-form-container{
+    width: 50%;
+    margin: 0 auto;
+}
+.movie-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.movie-form button{
+    width: 50%;
+    margin:0 auto;
+    margin-top: 36px;
+}
