@@ -1,0 +1,29 @@
+.movie-box-container {
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
+}
+.image-container {
+  width: 150px;
+  height: 170px;
+}
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.movie-details {
+  display: flex;
+}
+.description {
+  width: 80%;
+}
+.price {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}

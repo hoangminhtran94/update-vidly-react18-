@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import Input from "../../components/common/input";
 import { useNavigate } from "react-router-dom";
 import { userActions } from "../../store/user";
-import _ from "lodash";
+import classes from "./RegisterForm.module.css";
 const schema: { [key: string]: any } = {
   userName: Joi.string().email({ tlds: false }).required().label("Username"),
   password: Joi.string().min(5).required().label("Password"),
@@ -47,38 +47,10 @@ const Register: React.FC = () => {
     dispatch(userActions.addAUser(registerData));
     navigate("/movies");
   };
-  // doSubmit = async () => {
-  //   try {
-  //     const data = await userService.register(
-  //       "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD4o04Aw3jc1I0w0_iwu4wYOqdMMiSKBbI",
-  //       {
-  //         email: state.data.username,
-  //         password: state.data.password,
-  //         returnSecureToken: true,
-  //       }
-  //     );
-
-  //     data.json().then((res) => {
-  //       console.log(res);
-  //       console.log(res.headers);
-  //       auth.loginWithJwt(res.idToken);
-  //       console.log(auth.getCurrentUser());
-  //     });
-
-  //     // window.location = "/";
-  //   } catch (ex) {
-  //     if (ex.response && ex.response.status === 400) {
-  //       console.log(ex);
-  //       const errors = { ...state.errors };
-  //       errors.username = ex.response.data;
-  //     }
-  //   }
-  // };
-
   return (
-    <div>
+    <div className={`${classes["regiter-container"]} p-4 rounded`}>
       <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={classes["regiter-form"]} onSubmit={handleSubmit}>
         <Input
           name="userName"
           label="UserName"

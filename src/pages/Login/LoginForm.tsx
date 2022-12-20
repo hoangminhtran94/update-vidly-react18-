@@ -5,6 +5,7 @@ import _ from "lodash";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "./../../store/auth";
+import classes from "./LoginForm.module.css";
 const schema: { [key: string]: any } = {
   userName: Joi.string().required().email({ tlds: false }).label("Username"),
   password: Joi.string().required().label("Password"),
@@ -39,9 +40,9 @@ const LoginForm: React.FC = () => {
     navigate("/movies");
   };
   return (
-    <div>
+    <div className={`${classes["login-container"]} p-4 rounded`}>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form className={classes["login-form"]} onSubmit={handleSubmit}>
         <Input
           name="userName"
           label="UserName"
@@ -63,7 +64,7 @@ const LoginForm: React.FC = () => {
             !Object.values(errors).every((item) => item === "n/a")
           }
         >
-          Register
+          Login
         </button>
       </form>
     </div>

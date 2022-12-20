@@ -1,0 +1,21 @@
+.table-body td:nth-child(1) {
+  width: 40%;
+}
+
+.table-body td:nth-child(2) {
+  width: 20%;
+}
+.table-body td:nth-child(3) {
+  width: 10%;
+}
+.table-body td:nth-child(4) {
+  width: 10%;
+}
+
+.table-body td:nth-child(5) {
+  width: 5%;
+}
+
+.table-body td:last-child {
+  width: 10%;
+}

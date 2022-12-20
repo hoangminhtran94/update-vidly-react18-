@@ -1,16 +1,19 @@
-.movie-form-container {
+.regiter-container {
   width: 50%;
   margin: 0 auto;
-  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
-}
-.movie-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 32px;
+  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
 }
-.movie-form button {
+.regiter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.regiter-form button {
   width: 50%;
   margin: 0 auto;
-  margin-top: 36px;
+  margin-top: 32px;
+  padding: 8px;
 }

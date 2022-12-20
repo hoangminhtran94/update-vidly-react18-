@@ -14,7 +14,7 @@ const Home = () => {
       <h3>
         <NavBar user={user} />
       </h3>
-      <main className="container">
+      <main className="container mb-5">
         <Outlet />
       </main>
     </>

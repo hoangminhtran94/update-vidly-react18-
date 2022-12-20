@@ -8,6 +8,8 @@ export interface Movie {
   publishDate?: Date;
   liked?: boolean;
   isClick?: boolean;
+  description: string;
+  image: string;
 }
 
 export interface Genre {

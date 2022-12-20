@@ -1,16 +1,20 @@
-.movie-form-container {
+.login-container {
   width: 50%;
+  display: flex;
   margin: 0 auto;
+  flex-direction: column;
+  gap: 16px;
+
   box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
 }
-.movie-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-top: 32px;
 }
-.movie-form button {
+.login-form button {
   width: 50%;
   margin: 0 auto;
-  margin-top: 36px;
+  margin-top: 32px;
+  padding: 8px;
 }

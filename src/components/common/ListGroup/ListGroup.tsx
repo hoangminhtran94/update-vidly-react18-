@@ -40,9 +40,11 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
       {genre.map((g) => (
         <li
           key={g.id}
-          className={
-            g.id === currentGenre ? "list-group-item active" : "list-group-item"
-          }
+          className={`${
+            g.id === currentGenre
+              ? "list-group-item bg-dark text-white"
+              : "list-group-item"
+          } p-3`}
           onClick={() => onGenreChange(g.id)}
           style={{ cursor: "pointer" }}
         >
@@ -52,7 +54,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
       <li
         key="new-genre"
         style={{ cursor: "pointer" }}
-        className={"list-group-item list-group-item-info"}
+        className={"list-group-item list-group-item-secondary p-3"}
         onClick={() => {
           setToggleModal(true);
         }}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import auth from "../../../services/authService";
 import Like from "../../../components/common/like";
-import Table from "../../../components/common/table";
+import Table from "../../../components/common/Table";
 import { Movie } from "../../../store/models/Movie.model";
 
 interface MovieTableProps {

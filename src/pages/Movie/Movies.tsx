@@ -5,7 +5,7 @@ import Pagnition from "../../components/common/pagnition";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
 import { getGenres } from "../../services/genreService";
-import MoviesTable from "./components/moviesTable";
+import MoviesTable from "./components/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -81,7 +81,7 @@ const Movies: React.FC = () => {
   };
 
   return (
-    <div className="row">
+    <div className={`row rounder p-4 ${classes["movies-container"]}`}>
       <div className="col-3">
         <ListGroup
           genreCount={genre.length}

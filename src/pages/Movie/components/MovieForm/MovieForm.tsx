@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import { movieActions } from "../../../../store/movies";
 import _ from "lodash";
 import classes from "./MovieForm.module.css";
+import TextArea from "../../../../components/common/TextArea/TextArea";
+import UploadImage from "../../../../components/common/UploadImage/UploadImage";
 const schema: { [key: string]: any } = {
   id: Joi.string(),
   title: Joi.string().required().label("Title"),
@@ -28,6 +30,7 @@ const schema: { [key: string]: any } = {
     .min(0)
     .max(10)
     .label("Daily Rental Rate"),
+  description: Joi.string().required().label("Description"),
 };
 
 const MovieForm: React.FC = () => {
@@ -37,19 +40,23 @@ const MovieForm: React.FC = () => {
   const genres = useSelector<RootState, Genre[]>((state) => state.movie.genre);
   const movies = useSelector<RootState, Movie[]>((state) => state.movie.movies);
   const currentMovie = movies.find((movie) => movie.id === id);
+  const intialError = id !== "new" ? "n/a" : "";
   const initialMovieData = {
     id: currentMovie?.id || "",
     title: currentMovie?.title || "",
     dailyRentalRate: currentMovie?.dailyRentalRate || 0,
+    description: currentMovie?.description || "",
+    image: currentMovie?.image || "",
     numberInStock: currentMovie?.numberInStock || 0,
     genreId: currentMovie?.genreId || "",
   };
   const [movieData, setMovieData] = useState(initialMovieData);
-  const [errors, setErrors] = useState<{ [key: string]: string | boolean }>({
-    title: "",
-    dailyRentalRate: "",
-    numberInStock: "",
-    genreId: "",
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
+    title: intialError,
+    dailyRentalRate: intialError,
+    numberInStock: intialError,
+    genreId: intialError,
+    description: intialError,
   });
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -68,7 +75,7 @@ const MovieForm: React.FC = () => {
     value: string;
   }) => {
     const { error } = schema[name].validate(value);
-    return error ? error.details[0].message : false;
+    return error ? error.details[0].message : "n/a";
   };
 
   const onChangeHandler = ({
@@ -80,9 +87,12 @@ const MovieForm: React.FC = () => {
   };
 
   return (
-    <div className={classes["movie-form-container"]}>
-      <h1>{id === "new" ? "New movie" : "Edit"}</h1>
+    <div className={`${classes["movie-form-container"]} rounded p-4`}>
+      <h1 className="bg-light text-secondary">
+        {id === "new" ? "New movie" : "Edit"}
+      </h1>
       <form onSubmit={handleSubmit} className={classes["movie-form"]}>
+        <UploadImage getImage={(image, file) => {}} image={movieData.image} />
         <Input
           name="title"
           label="Title"
@@ -91,6 +101,7 @@ const MovieForm: React.FC = () => {
           error={errors.title}
           onChange={onChangeHandler}
         />
+
         <Select
           name={"genreId"}
           onChange={onChangeHandler}
@@ -98,6 +109,13 @@ const MovieForm: React.FC = () => {
           label={"Genre"}
           error={errors.genreId}
           options={genres}
+        />
+        <TextArea
+          name="description"
+          label="Description"
+          value={movieData.description}
+          error={errors.description}
+          onChange={onChangeHandler}
         />
         <Input
           name="numberInStock"
@@ -119,7 +137,7 @@ const MovieForm: React.FC = () => {
           className="btn btn-primary"
           disabled={
             _.isEqual(movieData, initialMovieData) ||
-            !Object.values(errors).every((item) => item === false)
+            !Object.values(errors).every((item) => item === "n/a")
           }
         >
           Save

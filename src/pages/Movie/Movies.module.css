@@ -1,3 +1,6 @@
+.movies-container {
+  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
+}
 .invalid-message {
-    margin-top: 32px;
+  margin-top: 32px;
 }
