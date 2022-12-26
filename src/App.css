@@ -1,4 +1,6 @@
-
+ul {
+  list-style-type: none;
+}
 .modal-enter {
   transform: translateY(-200px);
   opacity: 0;

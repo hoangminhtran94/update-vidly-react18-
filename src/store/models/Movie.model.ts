@@ -5,11 +5,12 @@ export interface Movie {
   genreId?: string;
   numberInStock: number;
   dailyRentalRate: number;
-  publishDate?: Date;
+  publishDate?: string;
   liked?: boolean;
   isClick?: boolean;
   description: string;
   image: string;
+  userId: string;
 }
 
 export interface Genre {

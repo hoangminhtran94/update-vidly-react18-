@@ -1,12 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import Form from "../../../../components/common/form";
 import { getGenres } from "../../../../services/genreService";
 import { getMovie, saveMovie } from "../../../../services/movieService";
 import Joi from "joi";
 import { useNavigate, useParams } from "react-router-dom";
 import { Genre, Movie } from "../../../../store/models/Movie.model";
-import Input from "../../../../components/common/input";
-import Select from "../../../../components/common/select";
+import Input from "../../../../components/common/Input/Input";
+import Select from "../../../../components/common/Select/Select";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import { v4 } from "uuid";
@@ -16,6 +15,9 @@ import _ from "lodash";
 import classes from "./MovieForm.module.css";
 import TextArea from "../../../../components/common/TextArea/TextArea";
 import UploadImage from "../../../../components/common/UploadImage/UploadImage";
+import { User } from "../../../../store/models/User.models";
+import { toast } from "react-toastify";
+
 const schema: { [key: string]: any } = {
   id: Joi.string(),
   title: Joi.string().required().label("Title"),
@@ -37,6 +39,12 @@ const MovieForm: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentUser = useSelector<RootState, User>(
+    (state) => state.auth.currentUser!
+  );
+  const token = useSelector<RootState, string | null>(
+    (state) => state.auth.token
+  );
   const genres = useSelector<RootState, Genre[]>((state) => state.movie.genre);
   const movies = useSelector<RootState, Movie[]>((state) => state.movie.movies);
   const currentMovie = movies.find((movie) => movie.id === id);
@@ -49,8 +57,12 @@ const MovieForm: React.FC = () => {
     image: currentMovie?.image || "",
     numberInStock: currentMovie?.numberInStock || 0,
     genreId: currentMovie?.genreId || "",
+    file: null,
+    userId: currentUser.id,
   };
-  const [movieData, setMovieData] = useState(initialMovieData);
+  const [movieData, setMovieData] = useState<Movie & { file: File | null }>(
+    initialMovieData
+  );
   const [errors, setErrors] = useState<{ [key: string]: string }>({
     title: intialError,
     dailyRentalRate: intialError,
@@ -61,7 +73,31 @@ const MovieForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (id === "new") {
-      dispatch(movieActions.addAMovie({ ...movieData, id: v4() }));
+      try {
+        const formData = new FormData();
+        formData.append("title", movieData.title);
+        formData.append("numberInStock", movieData.numberInStock.toString());
+        formData.append("dailyRentalRate", movieData.numberInStock.toString());
+        formData.append("description", movieData.description);
+        formData.append("image", movieData.file!);
+        formData.append("genreId", movieData.genreId!);
+        const response = await fetch("http://localhost:5000/api/movies", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        if (response.ok) {
+          const movie = await response.json();
+          dispatch(movieActions.addAMovie(movie as Movie));
+        } else {
+          const result = await response.json();
+          throw new Error(result.message);
+        }
+      } catch (error: any) {
+        toast(error.message, { type: "error" });
+      }
     } else {
       dispatch(movieActions.editAMovie(movieData));
     }
@@ -80,10 +116,15 @@ const MovieForm: React.FC = () => {
 
   const onChangeHandler = ({
     target,
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  }: ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >) => {
     const errorMessage = validateProperty(target);
     setErrors((prev) => (prev = { ...prev, [target.name]: errorMessage }));
     setMovieData((prev) => (prev = { ...prev, [target.name]: target.value }));
+  };
+  const selectImageHandler = (image: string, file: File | null) => {
+    setMovieData((prev) => (prev = { ...prev, image: image, file: file }));
   };
 
   return (
@@ -92,7 +133,7 @@ const MovieForm: React.FC = () => {
         {id === "new" ? "New movie" : "Edit"}
       </h1>
       <form onSubmit={handleSubmit} className={classes["movie-form"]}>
-        <UploadImage getImage={(image, file) => {}} image={movieData.image} />
+        <UploadImage getImage={selectImageHandler} image={movieData.image} />
         <Input
           name="title"
           label="Title"

@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "./models/User.models";
-interface UserProps {
+interface AuthState {
   currentUser: User | null;
+  token: string | null;
 }
-const initialState: UserProps = {
+export const initialState: AuthState = {
   currentUser: null,
+  token: null,
 };
 
 const authSlice = createSlice({
@@ -12,7 +14,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action) {
-      state.currentUser = action.payload;
+      state.currentUser = action.payload.user;
+      state.token = action.payload.token;
     },
     logout(state) {
       state.currentUser = null;

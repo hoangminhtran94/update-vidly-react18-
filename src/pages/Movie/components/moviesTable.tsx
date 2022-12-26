@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../services/authService";
-import Like from "../../../components/common/like";
-import Table from "../../../components/common/Table";
+import Like from "../../../components/common/Like/Like";
+import Table from "../../../components/common/Table/Table";
 import { Movie } from "../../../store/models/Movie.model";
 
 interface MovieTableProps {
@@ -14,13 +14,11 @@ interface MovieTableProps {
 }
 
 const MoviesTable: React.FC<MovieTableProps> = (props) => {
+  const navigate = useNavigate();
   const [columns, setColumn] = useState([
     {
       label: "Title",
       path: "title",
-      content: (movie: Movie) => (
-        <Link to={`/movies/${movie.id}`}>{movie.title}</Link>
-      ),
     },
     { label: "Genre", path: "genre.name" },
     { label: "Stock", path: "numberInStock" },
@@ -29,17 +27,31 @@ const MoviesTable: React.FC<MovieTableProps> = (props) => {
       key: "like",
       content: (movie: Movie) => (
         <Like
-          isClick={movie.isClick}
+          isClick={!!movie.isClick}
           onClick={() => props.onHandleClick(movie)}
         />
       ),
     },
     {
+      key: "edit",
+      content: (movie: Movie) => (
+        <button
+          className="btn btn-info text-white btn-sm"
+          onClick={() => {
+            navigate(`/movies/${movie.id}`);
+          }}
+        >
+          Edit
+        </button>
+      ),
+    },
+
+    {
       key: "delete",
       content: (movie) => (
         <button
           onClick={() => props.onHandleDelete(movie.id)}
-          className="btn btn-danger btn-sm m-2"
+          className="btn btn-danger btn-sm"
         >
           Delete
         </button>

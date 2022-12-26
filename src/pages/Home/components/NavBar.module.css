@@ -1,9 +1,14 @@
 .nav {
   width: 100%;
 }
+.cart-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 @media only screen and (min-width: 992px) {
   .user-profile {
-    margin-left: auto;
+    margin-left: 16px;
   }
   .user-profile > div {
     width: 100%;

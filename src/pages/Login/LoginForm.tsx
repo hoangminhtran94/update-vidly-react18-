@@ -1,11 +1,14 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import Joi from "joi";
-import Input from "../../components/common/input";
+import Input from "../../components/common/Input/Input";
 import _ from "lodash";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "./../../store/auth";
 import classes from "./LoginForm.module.css";
+import { RootState } from "../../store";
+import { User } from "../../store/models/User.models";
+import { toast } from "react-toastify";
 const schema: { [key: string]: any } = {
   userName: Joi.string().required().email({ tlds: false }).label("Username"),
   password: Joi.string().required().label("Password"),
@@ -29,15 +32,33 @@ const LoginForm: React.FC = () => {
 
   const onChangeHandler = ({
     target,
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  }: ChangeEvent<
+    HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+  >) => {
     const errorMessage = validateProperty(target);
     setErrors((prev) => (prev = { ...prev, [target.name]: errorMessage }));
     setLoginData((prev) => (prev = { ...prev, [target.name]: target.value }));
   };
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(authActions.login(loginData));
-    navigate("/movies");
+    try {
+      const response = await fetch("http://localhost:5000/api/user/login", {
+        method: "POST",
+        body: JSON.stringify(loginData),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        const { user, token } = await response.json();
+        dispatch(authActions.login({ user: user, token: token }));
+        localStorage.setItem("token", token);
+        navigate("/movies");
+      } else {
+        const result = await response.json();
+        throw new Error(result.message);
+      }
+    } catch (error: any) {
+      toast(error.message, { type: "error" });
+    }
   };
   return (
     <div className={`${classes["login-container"]} p-4 rounded`}>

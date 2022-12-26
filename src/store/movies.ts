@@ -1,6 +1,8 @@
 import { createSlice, ThunkAction, AnyAction } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import { Genre, Movie } from "./models/Movie.model";
+import { getMovies } from "./../services/movieService";
+import { toast } from "react-toastify";
 
 export interface MovieState {
   movies: Movie[];
@@ -13,110 +15,12 @@ export interface MovieState {
   sortColumn: { path: string; order: "asc" | "desc" };
 }
 const initialState: MovieState = {
-  movies: [
-    {
-      id: "5b21ca3eeb7f6fbccd471815",
-      title: "Terminator",
-      genreId: "5b21ca3eeb7f6fbccd471818",
-      numberInStock: 6,
-      dailyRentalRate: 2.5,
-      publishDate: new Date("2018-01-03T19:04:28.809Z"),
-      description:
-        "A human soldier is sent from 2029 to 1984 to stop an almost indestructible cyborg killing machine, sent from the same year, which has been programmed to execute a young woman whose unborn son is the key to humanity's future salvation.",
-      liked: true,
-      image:
-        "https://m.media-amazon.com/images/M/MV5BYTViNzMxZjEtZGEwNy00MDNiLWIzNGQtZDY2MjQ1OWViZjFmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
-    },
-    {
-      id: "5b21ca3eeb7f6fbccd471816",
-      title: "Die Hard",
-      genreId: "5b21ca3eeb7f6fbccd471818",
-      numberInStock: 5,
-      dailyRentalRate: 2.5,
-      description:
-        "A New York City police officer tries to save his estranged wife and several others taken hostage by terrorists during a Christmas party at the Nakatomi Plaza in Los Angeles.",
-      image:
-        "https://m.media-amazon.com/images/M/MV5BZjRlNDUxZjAtOGQ4OC00OTNlLTgxNmQtYTBmMDgwZmNmNjkxXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
-      publishDate: new Date("2018-01-03T19:04:28.809Z"),
-      liked: false,
-    },
-    {
-      id: "5b21ca3eeb7f6fbccd471817",
-      title: "Get Out",
-      genreId: "5b21ca3eeb7f6fbccd471820",
-      numberInStock: 8,
-      image:
-        "https://m.media-amazon.com/images/M/MV5BMjUxMDQwNjcyNl5BMl5BanBnXkFtZTgwNzcwMzc0MTI@._V1_.jpg",
-      description:
-        "A young African-American visits his white girlfriend's parents for the weekend, where his simmering uneasiness about their reception of him eventually reaches a boiling point.",
-      dailyRentalRate: 3.5,
-      publishDate: new Date("2018-01-03T19:04:28.809Z"),
-      liked: false,
-    },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd471819",
-    //   title: "Trip to Italy",
-    //   genreId: "5b21ca3eeb7f6fbccd471814",
-    //   numberInStock: 7,
-    //   dailyRentalRate: 3.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd47181a",
-    //   title: "Airplane",
-    //   genreId: "5b21ca3eeb7f6fbccd471814",
-    //   numberInStock: 7,
-    //   dailyRentalRate: 3.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd47181b",
-    //   title: "Wedding Crashers",
-    //   genreId: "5b21ca3eeb7f6fbccd471814",
-    //   numberInStock: 7,
-    //   dailyRentalRate: 3.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd47181e",
-    //   title: "Gone Girl",
-    //   genreId: "5b21ca3eeb7f6fbccd471820",
-    //   numberInStock: 7,
-    //   dailyRentalRate: 4.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd47181f",
-    //   title: "The Sixth Sense",
-    //   genreId: "5b21ca3eeb7f6fbccd471820",
-    //   numberInStock: 4,
-    //   dailyRentalRate: 3.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-    // {
-    //   id: "5b21ca3eeb7f6fbccd471821",
-    //   title: "The Avengers",
-    //   genreId: "5b21ca3eeb7f6fbccd471818",
-    //   numberInStock: 7,
-    //   dailyRentalRate: 3.5,
-    //   publishDate: new Date("2018-01-03T19:04:28.809Z"),
-    //   liked: true,
-    // },
-  ],
+  movies: [],
   currentMovie: null,
   pageSize: 4,
   currentPage: 1,
-  genre: [
-    { id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
-    { id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
-    { id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
-  ],
-  currentGenre: "5b21ca3eeb7f6fbccd471818",
+  genre: [],
+  currentGenre: "all",
   searchQuery: "",
   sortColumn: { path: "title", order: "asc" },
 };
@@ -124,6 +28,12 @@ const movieSlice = createSlice({
   name: "movie",
   initialState,
   reducers: {
+    setMovies(state, action) {
+      state.movies = action.payload;
+    },
+    setGenres(state, action) {
+      state.genre = action.payload;
+    },
     setGenre(state, action) {
       state.currentGenre = action.payload;
       state.searchQuery = "";
@@ -176,6 +86,50 @@ const movieSlice = createSlice({
 export const movieActions = movieSlice.actions;
 export default movieSlice.reducer;
 
+export const fetchMovies = (): ThunkAction<
+  Promise<void>,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/movies");
+      console.log(response);
+      if (response.ok) {
+        const movies = await response.json();
+        dispatch(movieActions.setMovies(movies));
+      } else {
+        throw new Error("Something went wrong");
+      }
+    } catch (error: any) {
+      toast(error.message, { type: "error" });
+    }
+  };
+};
+export const fetchGenres = (): ThunkAction<
+  Promise<void>,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/movies/genre", {
+        method: "GET",
+      });
+      console.log(response);
+      if (response.ok) {
+        const genres = await response.json();
+        dispatch(movieActions.setGenres(genres));
+      } else {
+        throw new Error("Something went wrong");
+      }
+    } catch (error: any) {
+      toast(error.message, { type: "error" });
+    }
+  };
+};
 export const deleteMovie = (
   movieId: string
 ): ThunkAction<Promise<void>, RootState, unknown, AnyAction> => {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import TableHeader from "./TableHeader";
-import TableBody from "./TableBody";
+import TableHeader from "../TableHeader/TableHeader";
+import TableBody from "../TableBody/TableBody";
 import classes from "./Table.module.css";
 import { Table as TableBoostrap } from "react-bootstrap";
 

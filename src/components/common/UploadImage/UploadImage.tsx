@@ -20,7 +20,16 @@ const UploadImage: React.FC<UploadImageProps> = ({ getImage, image }) => {
         inputRef.current?.click();
       }}
     >
-      {imageUrl && <img src={imageUrl} alt="uploadImage" />}
+      {imageUrl && (
+        <img
+          src={
+            !image?.includes("blob")
+              ? "http://localhost:5000/" + imageUrl
+              : imageUrl
+          }
+          alt="uploadImage"
+        />
+      )}
       {!imageUrl && (
         <p className={classes["image-placeholder"]}>Please choose an image</p>
       )}

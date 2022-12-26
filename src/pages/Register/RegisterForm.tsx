@@ -1,10 +1,14 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import Joi from "joi";
 import { useDispatch } from "react-redux";
-import Input from "../../components/common/input";
+import Input from "../../components/common/Input/Input";
 import { useNavigate } from "react-router-dom";
-import { userActions } from "../../store/user";
+import { customerActions } from "../../store/customer";
 import classes from "./RegisterForm.module.css";
+import UploadImage from "../../components/common/UploadImage/UploadImage";
+import { User } from "../../store/models/User.models";
+import { authActions } from "../../store/auth";
+import { toast } from "react-toastify";
 const schema: { [key: string]: any } = {
   userName: Joi.string().email({ tlds: false }).required().label("Username"),
   password: Joi.string().min(5).required().label("Password"),
@@ -13,12 +17,17 @@ const schema: { [key: string]: any } = {
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [registerData, setRegisterData] = useState({
+  const [registerData, setRegisterData] = useState<
+    User & { file: File | null }
+  >({
+    id: "",
     userName: "",
     password: "",
     name: "",
+    image: "",
+    file: null,
   });
-  const [errors, setErrors] = useState<{ [key: string]: string | boolean }>({
+  const [errors, setErrors] = useState<{ [key: string]: string }>({
     userName: "",
     password: "",
     name: "",
@@ -31,11 +40,13 @@ const Register: React.FC = () => {
     value: string;
   }) => {
     const { error } = schema[name].validate(value);
-    return error ? error.details[0].message : false;
+    return error ? error.details[0].message : "n/a";
   };
   const onChangeHandler = ({
     target,
-  }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  }: ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >) => {
     const errorMessage = validateProperty(target);
     setErrors((prev) => (prev = { ...prev, [target.name]: errorMessage }));
     setRegisterData(
@@ -44,13 +55,37 @@ const Register: React.FC = () => {
   };
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    dispatch(userActions.addAUser(registerData));
-    navigate("/movies");
+    try {
+      const formData = new FormData();
+      formData.append("name", registerData.name);
+      formData.append("userName", registerData.userName);
+      formData.append("password", registerData.password!);
+      formData.append("image", registerData.file!);
+
+      const response = await fetch("http://localhost:5000/api/user/register", {
+        method: "POST",
+        body: formData,
+      });
+      if (response.ok) {
+        const { user, token } = await response.json();
+        dispatch(authActions.login({ user: user, token: token }));
+        localStorage.setItem("token", token);
+        navigate("/movies");
+      } else {
+        throw new Error("Error");
+      }
+    } catch (error) {
+      return toast("Something when wrong", { type: "error" });
+    }
+  };
+  const chooseImageHandler = (image: string, file: File | null) => {
+    setRegisterData((prev) => (prev = { ...prev, image: image, file: file }));
   };
   return (
     <div className={`${classes["regiter-container"]} p-4 rounded`}>
       <h1>Register</h1>
       <form className={classes["regiter-form"]} onSubmit={handleSubmit}>
+        <UploadImage image={registerData.image} getImage={chooseImageHandler} />
         <Input
           name="userName"
           label="UserName"
@@ -75,7 +110,7 @@ const Register: React.FC = () => {
 
         <button
           className="btn btn-primary"
-          disabled={!Object.values(errors).every((item) => item === false)}
+          disabled={!Object.values(errors).every((item) => item === "n/a")}
         >
           Register
         </button>
