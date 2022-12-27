@@ -1,10 +1,9 @@
-import React, { Component, useState, useEffect, useMemo } from "react";
-import { getMovies } from "../../services/movieService";
-import { deleteMovie } from "../../store/movies";
+import React, { useEffect, useMemo } from "react";
+
 import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
-import { getGenres } from "../../services/genreService";
+
 import MoviesTable from "./components/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,15 +12,20 @@ import SearchBox from "../../components/common/SearchBox/SearchBox";
 import { toast } from "react-toastify";
 import type { RootState } from "../../store";
 import { MovieState } from "../../store/movies";
-import { Genre, Movie } from "./../../store/models/Movie.model";
+import { Movie } from "./../../store/models/Movie.model";
 import { movieActions } from "../../store/movies";
-import { useTypedDispatch } from "./../../store/index";
 import classes from "./Movies.module.css";
 import { User } from "../../store/models/User.models";
+import {
+  useGetGenresQuery,
+  useGetMoviesQuery,
+  useDeleteMovieMutation,
+} from "../../store/movieApi";
 const Movies: React.FC = () => {
+  const { data: movies, error } = useGetMoviesQuery();
+  const { data: genre } = useGetGenresQuery();
+  const [deleteMovie] = useDeleteMovieMutation();
   const {
-    genre,
-    movies,
     currentGenre,
     searchQuery,
     pageSize,
@@ -33,11 +37,9 @@ const Movies: React.FC = () => {
     (state) => state.auth.currentUser!
   );
   const dispatch = useDispatch();
-  const dispatchThunk = useTypedDispatch();
-  useEffect(() => {}, []);
 
   const handleDelete = async (movieId: string) => {
-    dispatchThunk(deleteMovie(movieId));
+    await deleteMovie(movieId);
   };
   const handleClick = (movie: Movie) => {
     dispatch(movieActions.setClick(movie));
@@ -55,11 +57,14 @@ const Movies: React.FC = () => {
     dispatch(movieActions.setSort(sortColumn));
   };
   //Temporary movies
-  const temporaryMovies = movies.filter(
-    (movie) => movie.userId === currentUser.id
-  );
+
+  const temporaryMovies =
+    movies && movies.filter((movie) => movie.userId === currentUser.id);
 
   const filtered = useMemo(() => {
+    if (!temporaryMovies) {
+      return [];
+    }
     return searchQuery
       ? temporaryMovies.filter((m) =>
           m.title.toLowerCase().match(searchQuery.toLowerCase())
@@ -73,6 +78,9 @@ const Movies: React.FC = () => {
     () =>
       _.orderBy(filtered, [sortColumn.path], [sortColumn.order]).map(
         (movie) => {
+          if (!genre) {
+            return;
+          }
           const currentGenre = genre.find(
             (genre) => genre.id === movie.genreId
           );
@@ -89,7 +97,9 @@ const Movies: React.FC = () => {
   const handleSearch = (query: string) => {
     dispatch(movieActions.setSearchQuery(query));
   };
-
+  if (!movies || !genre) {
+    return <div>Error</div>;
+  }
   return (
     <div className="container">
       <div className={`row rounder p-4 ${classes["movies-container"]}`}>

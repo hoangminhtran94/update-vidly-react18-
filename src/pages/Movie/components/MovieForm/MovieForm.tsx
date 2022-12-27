@@ -17,6 +17,12 @@ import TextArea from "../../../../components/common/TextArea/TextArea";
 import UploadImage from "../../../../components/common/UploadImage/UploadImage";
 import { User } from "../../../../store/models/User.models";
 import { toast } from "react-toastify";
+import {
+  useAddAMovieMutation,
+  useGetGenresQuery,
+  useGetMoviesQuery,
+  useUpdateAMovieMutation,
+} from "../../../../store/movieApi";
 
 const schema: { [key: string]: any } = {
   id: Joi.string(),
@@ -37,17 +43,17 @@ const schema: { [key: string]: any } = {
 
 const MovieForm: React.FC = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [addAMovie, { isLoading, isSuccess }] = useAddAMovieMutation();
+  const [updateAMovie, { isLoading: updateMovieLoading }] =
+    useUpdateAMovieMutation();
   const currentUser = useSelector<RootState, User>(
     (state) => state.auth.currentUser!
   );
-  const token = useSelector<RootState, string | null>(
-    (state) => state.auth.token
-  );
-  const genres = useSelector<RootState, Genre[]>((state) => state.movie.genre);
-  const movies = useSelector<RootState, Movie[]>((state) => state.movie.movies);
-  const currentMovie = movies.find((movie) => movie.id === id);
+  const { data: genres } = useGetGenresQuery();
+  const { data: movies } = useGetMoviesQuery();
+
+  const currentMovie = movies && movies.find((movie) => movie.id === id);
   const intialError = id !== "new" ? "n/a" : "";
   const initialMovieData = {
     id: currentMovie?.id || "",
@@ -72,36 +78,25 @@ const MovieForm: React.FC = () => {
   });
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (id === "new") {
-      try {
-        const formData = new FormData();
-        formData.append("title", movieData.title);
-        formData.append("numberInStock", movieData.numberInStock.toString());
-        formData.append("dailyRentalRate", movieData.numberInStock.toString());
-        formData.append("description", movieData.description);
-        formData.append("image", movieData.file!);
-        formData.append("genreId", movieData.genreId!);
-        const response = await fetch("http://localhost:5000/api/movies", {
-          method: "POST",
-          body: formData,
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
-        if (response.ok) {
-          const movie = await response.json();
-          dispatch(movieActions.addAMovie(movie as Movie));
-        } else {
-          const result = await response.json();
-          throw new Error(result.message);
-        }
-      } catch (error: any) {
-        toast(error.message, { type: "error" });
-      }
-    } else {
-      dispatch(movieActions.editAMovie(movieData));
+    const formData = new FormData();
+    formData.append("title", movieData.title);
+    formData.append("numberInStock", movieData.numberInStock.toString());
+    formData.append("dailyRentalRate", movieData.numberInStock.toString());
+    formData.append("description", movieData.description);
+    if (movieData.file) {
+      formData.append("image", movieData.file);
     }
-    navigate("/movies");
+    formData.append("genreId", movieData.genreId!);
+    if (id === "new") {
+      await addAMovie(formData);
+    } else {
+      formData.append("id", movieData.id);
+      await updateAMovie(formData);
+    }
+
+    if (!isLoading || !updateMovieLoading) {
+      navigate("/movies");
+    }
   };
   const validateProperty = ({
     name,
@@ -126,7 +121,9 @@ const MovieForm: React.FC = () => {
   const selectImageHandler = (image: string, file: File | null) => {
     setMovieData((prev) => (prev = { ...prev, image: image, file: file }));
   };
-
+  if (!genres) {
+    return <></>;
+  }
   return (
     <div className={`${classes["movie-form-container"]} rounded p-4`}>
       <h1 className="bg-light text-secondary">

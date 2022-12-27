@@ -20,8 +20,6 @@ import auth from "./services/authService";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home/Home";
 import { useSelector } from "react-redux";
-import { useTypedDispatch } from "./store";
-import { fetchGenres, fetchMovies } from "./store/movies";
 const ProtectedRoute = ({ user, children }) => {
   if (user) {
     return children;
@@ -34,14 +32,7 @@ const App = () => {
   const user = useSelector((state) => state.auth.currentUser);
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatchThunk = useTypedDispatch();
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatchThunk(fetchGenres());
-      await dispatchThunk(fetchMovies());
-    };
-    fetchData();
-  }, [dispatchThunk]);
+
   useEffect(() => {
     const pathname = location.pathname;
     if (pathname === "/") {

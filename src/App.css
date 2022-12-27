@@ -20,6 +20,25 @@ ul {
   transition: all 300ms;
 }
 
+.chatbox-enter {
+  transform-origin: right bottom;
+  transform: scale(0);
+}
+.chatbox-enter-active {
+  transform-origin: right bottom;
+  transform: scale(1);
+  transition: all 300ms;
+}
+.chatbox-exit {
+  transform-origin: right bottom;
+  transform: scale(1);
+}
+.chatbox-exit-active {
+  transform-origin: right bottom;
+  transform: scale(0);
+  transition: all 300ms;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

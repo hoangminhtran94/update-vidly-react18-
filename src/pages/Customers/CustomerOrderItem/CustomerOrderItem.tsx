@@ -38,7 +38,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
         </div>
         <div className="col-1 d-flex align-items-center ">Pending</div>
         <div
-          className="col-2 d-flex justify-content-center"
+          className={classes["order-actions"] + " col-2 d-flex"}
           style={{ gap: "8px" }}
         >
           <Button variant="success" size="sm">

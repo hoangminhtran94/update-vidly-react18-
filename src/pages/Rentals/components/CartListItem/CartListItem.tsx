@@ -11,14 +11,17 @@ import {
 import { RootState } from "../../../../store";
 import { Movie } from "../../../../store/models/Movie.model";
 import { useTypedDispatch } from "../../../../store";
+import { useGetMoviesQuery } from "../../../../store/movieApi";
 interface CartItemProps {
   item: CartItem;
 }
 
 const CartListItem: React.FC<CartItemProps> = ({ item }) => {
-  const dispatch = useDispatch();
   const dispatchThunk = useTypedDispatch();
-  const movies = useSelector<RootState, Movie[]>((state) => state.movie.movies);
+  const { data: movies, isLoading: movieIsLoading } = useGetMoviesQuery();
+  if (!movies) {
+    return <></>;
+  }
   const currentMovie = movies.find((movie) => movie.id === item.movieId);
   if (!currentMovie) {
     return <></>;
@@ -63,28 +66,26 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
           <p className="fw-bold mb-2">Title</p>
           <p className="m-0">{currentMovie.title}</p>
         </div>
-        <div className="col-3">
+        <div className="col-3 p-0">
           <p className="fw-bold mb-2">Quantity</p>
-          <div className="d-flex align-items-center ">
-            <Button
-              className={`${classes["substitute-button"]} rounded-circle`}
-              variant="danger"
+          <div className={classes["quantity-form-group"] + " d-flex rounded"}>
+            <button
+              className={`${classes["substitute-button"]}`}
               onClick={async () => {
                 dispatchThunk(postACartItem(item.movieId, -1));
               }}
             >
               -
-            </Button>
-            <p className="m-0 mx-1">{item.quantity}</p>
-            <Button
-              className={`${classes["increment-button"]} rounded`}
-              variant="success"
+            </button>
+            <input className="form-control m-0 mx-0" value={item.quantity} />
+            <button
+              className={`${classes["increment-button"]}`}
               onClick={async () => {
                 dispatchThunk(postACartItem(item.movieId, 1));
               }}
             >
               +
-            </Button>
+            </button>
           </div>
         </div>
         <div className="col-2">

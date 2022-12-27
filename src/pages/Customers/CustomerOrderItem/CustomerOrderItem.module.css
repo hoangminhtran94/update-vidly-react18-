@@ -5,3 +5,9 @@
   min-height: 30px !important;
   cursor: pointer;
 } */
+.order-actions {
+  justify-content: center;
+}
+.order-actions button {
+  height: 40px;
+}

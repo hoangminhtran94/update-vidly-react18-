@@ -108,7 +108,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
               );
               if (response.ok) {
                 const genre = await response.json();
-                dispatch(movieActions.addAGenre(genre));
+                // dispatch(movieActions.addAGenre(genre));
                 setToggleModal(false);
               } else {
                 const result = await response.json();

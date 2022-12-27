@@ -3,7 +3,9 @@ import usePopulateOrderData from "./../../utils/hooks/usePopulateCustomerData";
 import CustomerOrderItem from "./CustomerOrderItem/CustomerOrderItem";
 const Customer: React.FC = () => {
   const orderData = usePopulateOrderData();
-  console.log(orderData);
+  if (!orderData) {
+    return <></>;
+  }
   return (
     <div className="container rounded shadow-sm p-4">
       <h1>Customers</h1>

@@ -1,16 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import MovieBox from "./components/MovieBox/MovieBox";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { Genre, Movie } from "../../store/models/Movie.model";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
 import { useDispatch } from "react-redux";
 import { movieActions } from "../../store/movies";
-
+import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieApi";
 const Rentals = () => {
   const dispatch = useDispatch();
-  const movies = useSelector<RootState, Movie[]>((state) => state.movie.movies);
-  const genre = useSelector<RootState, Genre[]>((state) => state.movie.genre);
+  const { data: movies, isLoading: movieIsLoading } = useGetMoviesQuery();
+  const { data: genre, isLoading: genreIsLoading } = useGetGenresQuery();
+
   const currentGenre = useSelector<RootState, string>(
     (state) => state.movie.currentGenre
   );
@@ -22,9 +22,15 @@ const Rentals = () => {
   const currentMovies =
     currentGenre === "all"
       ? movies
-      : movies.filter((movies) => movies.genreId === currentGenre);
-  if (movies.length === 0) {
+      : movies!.filter((movies) => movies.genreId === currentGenre);
+  if (movies && movies.length === 0) {
     return <h2>There's no movies</h2>;
+  }
+  if (!movies || !genre) {
+    return <div>No data</div>;
+  }
+  if (movieIsLoading || genreIsLoading) {
+    return <div>Loading</div>;
   }
   return (
     <div className="container">
@@ -34,14 +40,14 @@ const Rentals = () => {
       <div className="row">
         <div className="col-2">
           <ListGroup
-            genreCount={genre.length}
-            genre={genre}
+            genreCount={genre!.length}
+            genre={genre!}
             currentGenre={currentGenre}
             onGenreChange={handleGenreChange}
           />
         </div>
         <div className="col">
-          {currentMovies.map((movie, index) => (
+          {currentMovies!.map((movie, index) => (
             <MovieBox key={index} data={movie} />
           ))}
         </div>

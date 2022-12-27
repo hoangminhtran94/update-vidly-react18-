@@ -1,0 +1,30 @@
+.chatbox {
+  display: flex;
+  padding: 8px;
+  overflow: visible;
+  align-items: flex-end;
+}
+.chatbox-message {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+.send-message {
+  border-bottom-left-radius: unset !important;
+}
+.receive-message {
+  border-bottom-right-radius: unset !important;
+}
+.chatbox-message p {
+  margin: 0;
+}
+.message-row {
+  font-size: medium;
+}
+.time-row {
+  font-size: x-small;
+  text-align: end;
+}
+.image-icon {
+  width: 20px;
+  height: 20px;
+}

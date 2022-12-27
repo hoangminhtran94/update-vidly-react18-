@@ -1,5 +1,4 @@
 .checkout-button {
-  justify-self: center !important;
-  margin-left: 40% !important;
   color: white !important;
+  justify-content: center;
 }
