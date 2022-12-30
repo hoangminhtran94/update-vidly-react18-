@@ -2,14 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { CartItem } from "../../../../store/models/CartItem.modules";
 import classes from "./CartListItem.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  cartActions,
-  deleteCartItem,
-  postACartItem,
-} from "./../../../../store/cart";
-import { RootState } from "../../../../store";
-import { Movie } from "../../../../store/models/Movie.model";
+import { deleteCartItem, postACartItem } from "./../../../../store/cart";
 import { useTypedDispatch } from "../../../../store";
 import { useGetMoviesQuery } from "../../../../store/movieApi";
 interface CartItemProps {

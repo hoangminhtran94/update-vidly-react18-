@@ -41,9 +41,6 @@ const Movies: React.FC = () => {
   const handleDelete = async (movieId: string) => {
     await deleteMovie(movieId);
   };
-  const handleClick = (movie: Movie) => {
-    dispatch(movieActions.setClick(movie));
-  };
 
   const handlePageChange = (page: number) => {
     dispatch(movieActions.setCurrentPage(page));
@@ -124,11 +121,13 @@ const Movies: React.FC = () => {
             </h2>
           ) : (
             <>
-              <p>Number of movies: {filtered.length}</p>
+              <p className="mt-2 fw-bold">
+                Number of movies: {filtered.length}
+              </p>
               <SearchBox value={searchQuery} onSearch={handleSearch} />
               <MoviesTable
                 movie={movie}
-                onHandleClick={handleClick}
+                onHandleClick={() => {}}
                 onHandleDelete={handleDelete}
                 onSort={handleSort}
                 sortColumn={sortColumn}

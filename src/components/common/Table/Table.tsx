@@ -21,7 +21,7 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ columns, sortColumn, data, onSort }) => {
   return (
-    <TableBoostrap className={classes["table"]} striped hover size="bg">
+    <TableBoostrap className={classes["table"]} hover size="bg">
       <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
       <TableBody data={data} columns={columns} />
     </TableBoostrap>

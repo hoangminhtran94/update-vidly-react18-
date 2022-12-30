@@ -23,6 +23,24 @@ export const movieApiSlice = createApi({
       query: () => ({ url: "movies/genre" }),
       providesTags: ["movieData"],
     }),
+    addAGenre: builder.mutation<any, Genre>({
+      query: (genre) => ({
+        url: "movies/genre",
+        method: "POST",
+        body: JSON.stringify(genre),
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["movieData"],
+    }),
+    editAGenre: builder.mutation<any, Genre>({
+      query: (genre) => ({
+        url: "movies/genre/" + genre.id,
+        method: "POST",
+        body: JSON.stringify({ name: genre.name }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["movieData"],
+    }),
     deleteMovie: builder.mutation<any, string>({
       query: (id) => ({
         url: `movies/${id}`,
@@ -55,4 +73,6 @@ export const {
   useDeleteMovieMutation,
   useAddAMovieMutation,
   useUpdateAMovieMutation,
+  useAddAGenreMutation,
+  useEditAGenreMutation,
 } = movieApiSlice;

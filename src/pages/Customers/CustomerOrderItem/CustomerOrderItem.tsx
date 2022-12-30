@@ -10,7 +10,7 @@ interface CustomerOrderItemProps {
 const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
   const [toggleViewCustomer, setToggleViewCustomer] = useState(false);
   return (
-    <li className="container shadow-sm p-3 mb-2">
+    <li className="container shadow-sm p-3 mb-4 rounded">
       <div className="row d-flex">
         <div className="col-1  d-flex align-items-center">
           <Image
@@ -34,12 +34,18 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
             setToggleViewCustomer(true);
           }}
         >
-          <p className=" m-0">{`${data.userName}`}</p>
+          <p
+            className={classes["customer-name"] + " m-0"}
+          >{`${data.userName}`}</p>
         </div>
-        <div className="col-1 d-flex align-items-center ">Pending</div>
+        <div className="col-1 d-flex align-items-center text-success fw-bold">
+          <p className={classes["status"] + " m-0"}> Pending</p>
+        </div>
         <div
-          className={classes["order-actions"] + " col-2 d-flex"}
-          style={{ gap: "8px" }}
+          className={
+            classes["order-actions"] + " col-2 d-flex align-items-center"
+          }
+          style={{ gap: "8px", flexWrap: "wrap" }}
         >
           <Button variant="success" size="sm">
             Ship

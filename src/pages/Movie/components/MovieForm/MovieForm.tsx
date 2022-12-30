@@ -81,7 +81,7 @@ const MovieForm: React.FC = () => {
     const formData = new FormData();
     formData.append("title", movieData.title);
     formData.append("numberInStock", movieData.numberInStock.toString());
-    formData.append("dailyRentalRate", movieData.numberInStock.toString());
+    formData.append("dailyRentalRate", movieData.dailyRentalRate.toString());
     formData.append("description", movieData.description);
     if (movieData.file) {
       formData.append("image", movieData.file);
@@ -126,9 +126,7 @@ const MovieForm: React.FC = () => {
   }
   return (
     <div className={`${classes["movie-form-container"]} rounded p-4`}>
-      <h1 className="bg-light text-secondary">
-        {id === "new" ? "New movie" : "Edit"}
-      </h1>
+      <h1 className="text-secondary">{id === "new" ? "New movie" : "Edit"}</h1>
       <form onSubmit={handleSubmit} className={classes["movie-form"]}>
         <UploadImage getImage={selectImageHandler} image={movieData.image} />
         <Input

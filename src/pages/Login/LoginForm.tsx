@@ -9,11 +9,13 @@ import classes from "./LoginForm.module.css";
 import { RootState } from "../../store";
 import { User } from "../../store/models/User.models";
 import { toast } from "react-toastify";
+import { useLoginMutation } from "../../store/authApi";
 const schema: { [key: string]: any } = {
   userName: Joi.string().required().email({ tlds: false }).label("Username"),
   password: Joi.string().required().label("Password"),
 };
 const LoginForm: React.FC = () => {
+  const [login] = useLoginMutation();
   const initialState = { userName: "", password: "" };
   const [loginData, setLoginData] = useState(initialState);
   const [errors, setErrors] = useState({ userName: "", password: "" });
@@ -42,22 +44,12 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/user/login", {
-        method: "POST",
-        body: JSON.stringify(loginData),
-        headers: { "Content-Type": "application/json" },
-      });
-      if (response.ok) {
-        const { user, token } = await response.json();
-        dispatch(authActions.login({ user: user, token: token }));
-        localStorage.setItem("token", token);
-        navigate("/movies");
-      } else {
-        const result = await response.json();
-        throw new Error(result.message);
-      }
+      const { user, token } = await login(loginData).unwrap();
+      dispatch(authActions.login({ user: user, token: token }));
+      localStorage.setItem("token", token);
+      navigate("/movies");
     } catch (error: any) {
-      toast(error.message, { type: "error" });
+      toast(error.data.message, { type: "error" });
     }
   };
   return (

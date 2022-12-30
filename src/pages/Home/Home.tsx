@@ -8,7 +8,7 @@ import CartSideBar from "../Rentals/components/CartSideBar/CartSideBar";
 import { useEffect } from "react";
 import { useTypedDispatch } from "../../store";
 import { getCart } from "../../store/cart";
-import { fetchCustomer } from "../../store/customer";
+
 import ChatBox from "./../../components/ChatBox/ChatBox";
 import ChatBoxIcon from "../../components/ChatBoxIcon/ChatBoxIcon";
 import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieApi";
@@ -23,7 +23,6 @@ const Home = () => {
   useEffect(() => {
     const fetchWhenLogin = async () => {
       await dispatchThunk(getCart());
-      await dispatchThunk(fetchCustomer());
     };
     if (user) {
       fetchWhenLogin();
@@ -34,12 +33,12 @@ const Home = () => {
     <>
       <ToastContainer autoClose={1000} theme="colored" />
       {!toggle && user && <ChatBoxIcon />}
-      <ChatBox />
+      {user && <ChatBox />}
       <CartSideBar />
-      <h3>
-        <NavBar user={user} />
-      </h3>
-      <main className="container-fluid mb-5">
+
+      <NavBar user={user} />
+
+      <main className="container-fluid p-4">
         <Outlet />
       </main>
     </>

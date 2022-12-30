@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import _ from "lodash";
 import { Genre } from "../../../store/models/Movie.model";
-import Modal from "../Modal/Modal";
-import Input from "../Input/Input";
 import classes from "./ListGroup.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import Joi from "joi";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import { movieActions } from "../../../store/movies";
-import { v4 } from "uuid";
-import { toast } from "react-toastify";
-
+import GenreModal from "./GenreModal/GenreModal";
+import { useLocation } from "react-router-dom";
 interface ListGroupProps {
   genre: Genre[];
   genreCount: number;
@@ -19,28 +13,13 @@ interface ListGroupProps {
 }
 
 const ListGroup: React.FC<ListGroupProps> = (props) => {
-  const dispatch = useDispatch();
+  const location = useLocation();
+
   const token = useSelector<RootState, string | null>(
     (state) => state.auth.token
   );
   const { genre, genreCount, currentGenre, onGenreChange } = props;
-  const [genreData, setGenreData] = useState({ id: "", name: "" });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({
-    name: "",
-  });
-  const onChangeHandler = ({
-    target,
-  }: React.ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  >) => {
-    setGenreData({ ...genreData, name: target.value });
-    const error = Joi.string()
-      .required()
-      .label("Genre name")
-      .validate(target.value).error?.details[0].message;
-    setErrors({ ...errors, name: error ? error : "n/a" });
-  };
-
+  const [data, setData] = useState<Genre | undefined>();
   const [toggleModal, setToggleModal] = useState(false);
   return (
     <ul className="list-group">
@@ -52,11 +31,15 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
             ? "list-group-item bg-dark text-white"
             : "list-group-item"
         } p-3`}
-        onClick={() => {
-          onGenreChange("all");
-        }}
       >
-        All Genre
+        <p
+          className="m-0"
+          onClick={() => {
+            onGenreChange("all");
+          }}
+        >
+          All Genre
+        </p>
       </li>
       {genre.map((g) => (
         <li
@@ -66,70 +49,58 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
               ? "list-group-item bg-dark text-white"
               : "list-group-item"
           } p-3`}
-          onClick={() => onGenreChange(g.id)}
-          style={{ cursor: "pointer" }}
+          style={{ position: "relative" }}
         >
-          {g.name}
+          <p
+            className="m-0"
+            onClick={() => {
+              onGenreChange(g.id);
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            {g.name}
+          </p>
+
+          {token && location.pathname !== "/rentals" && (
+            <span
+              className={classes["edit-icon"]}
+              onClick={() => {
+                setToggleModal(true);
+                setData(g);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                fill="currentColor"
+                className="bi bi-pencil"
+                viewBox="0 0 16 16"
+              >
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+              </svg>
+            </span>
+          )}
         </li>
       ))}
-      {token && (
+      {token && location.pathname !== "/rentals" && (
         <li
           key="new-genre"
           style={{ cursor: "pointer" }}
           className={"list-group-item list-group-item-secondary p-3"}
           onClick={() => {
             setToggleModal(true);
+            setData(undefined);
           }}
         >
           New Genre +
         </li>
       )}
-      <Modal
+      <GenreModal
         toggle={toggleModal}
-        onClick={() => {
-          setToggleModal(false);
-        }}
-      >
-        <form
-          className={classes["new-genre-form"]}
-          onSubmit={async (e) => {
-            e.preventDefault();
-            try {
-              const response = await fetch(
-                "http://localhost:5000/api/movies/genre",
-                {
-                  method: "POST",
-                  body: JSON.stringify({ name: genreData.name }),
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + token,
-                  },
-                }
-              );
-              if (response.ok) {
-                const genre = await response.json();
-                // dispatch(movieActions.addAGenre(genre));
-                setToggleModal(false);
-              } else {
-                const result = await response.json();
-                throw new Error(result.message);
-              }
-            } catch (error: any) {
-              toast(error.message, { type: "error" });
-            }
-          }}
-        >
-          <Input
-            name={"genre"}
-            label={"Genre name"}
-            error={errors.name}
-            onChange={onChangeHandler}
-          />
-          <button type="submit" className="btn btn-success">
-            Save
-          </button>
-        </form>
-      </Modal>
+        setToggleModal={setToggleModal}
+        data={data}
+      />
     </ul>
   );
 };

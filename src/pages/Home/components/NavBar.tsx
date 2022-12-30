@@ -1,26 +1,28 @@
 import React, { Component } from "react";
-import { NavLink, Link } from "react-router-dom";
-import Rentals from "../../Rentals/Rentals";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Badge, Button } from "react-bootstrap";
 import classes from "./NavBar.module.css";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../../store/auth";
+import { authActions, logoutAndClearCache } from "../../../store/auth";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { User } from "../../../store/models/User.models";
 import { cartActions } from "./../../../store/cart";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { CartItem } from "./../../../store/models/CartItem.modules";
+import { useTypedDispatch } from "../../../store";
 const NavBar: React.FC<{ user: User | null }> = ({ user }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const dispatchThunk = useTypedDispatch();
   const cartItems = useSelector<RootState, CartItem[]>(
     (state) => state.cart.cartItems
   );
   return (
-    <Navbar className="mb-0" bg="dark" variant="dark" expand="lg">
+    <Navbar className="mb-0 " bg="dark" variant="dark" expand="lg" sticky="top">
       <Container>
         <Navbar.Brand>
           <Link className="navbar-brand" to="/">
@@ -85,25 +87,21 @@ const NavBar: React.FC<{ user: User | null }> = ({ user }) => {
                 className={`${classes["user-profile"]}`}
                 title={user.userName}
               >
-                <NavDropdown.Item>
-                  <NavLink
-                    className="nav-item nav-link text-secondary"
-                    to="/profile"
-                  >
+                <NavDropdown.Item
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  <p className="nav-item nav-link text-secondary m-0">
                     Profile
-                  </NavLink>
+                  </p>
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   onClick={() => {
-                    dispatch(authActions.logout());
+                    dispatchThunk(logoutAndClearCache());
                   }}
                 >
-                  <p
-                    className="nav-item nav-link text-secondary"
-                    style={{ margin: 0 }}
-                  >
-                    Logout
-                  </p>
+                  <p className="nav-item nav-link text-secondary m-0">Logout</p>
                 </NavDropdown.Item>
               </NavDropdown>
             )}

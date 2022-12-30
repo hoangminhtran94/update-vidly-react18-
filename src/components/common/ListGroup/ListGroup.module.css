@@ -1,5 +1,5 @@
-.new-genre-form{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.edit-icon {
+  position: absolute;
+  top: 0;
+  right: 8px;
 }

@@ -1,17 +1,29 @@
 import React from "react";
 import { Image } from "react-bootstrap";
 import classes from "./ChatBoxMessage.module.css";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { User } from "../../store/models/User.models";
+import { Message } from "../../store/models/Message.modules";
 interface ChatBoxMessageProps {
   type: "send" | "receive";
+  message: Message;
+  users: User[];
 }
-const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({ type }) => {
+const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
+  type,
+  message,
+  users,
+}) => {
+  const sender = useSelector<RootState, User | null>(
+    (state) => state.auth.currentUser
+  );
   return (
     <div className={classes["chatbox"] + " rounded"}>
       {type === "send" && (
         <div className="col-1">
           <Image
-            src="http://localhost:5000/storage/images/1eededab-f575-4dce-81e1-16946479d6e3.jpeg"
+            src={"http://localhost:5000/" + sender?.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm"}
           />
@@ -22,13 +34,10 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({ type }) => {
           type === "send" ? classes["send-message"] : classes["receive-message"]
         }`}
       >
-        <p className={classes["message-row"]}>
-          Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello
-          Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello{" "}
-        </p>
+        <p className={classes["message-row"] + " pb-2"}>{message.message}</p>
 
         <p className={classes["time-row"]}>
-          8:00am{" "}
+          {new Date(message.time).toLocaleTimeString("en-CA")}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -44,7 +53,10 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({ type }) => {
       {type === "receive" && (
         <div className="col-1 d-flex justify-content-center">
           <Image
-            src="http://localhost:5000/storage/images/1eededab-f575-4dce-81e1-16946479d6e3.jpeg"
+            src={
+              "http://localhost:5000/" +
+              users.find((user) => user.id === message.senderId)?.image
+            }
             roundedCircle
             className={classes["image-icon"] + " shadow-sm"}
           />

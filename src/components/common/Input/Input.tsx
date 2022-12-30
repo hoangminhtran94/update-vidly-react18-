@@ -1,8 +1,7 @@
-import React, { HTMLAttributes, HTMLProps, ElementType } from "react";
+import React from "react";
 import { FormControlProps } from "react-bootstrap";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { BsPrefixProps } from "react-bootstrap/esm/helpers";
 
 interface InputProps extends FormControlProps {
   name: string;

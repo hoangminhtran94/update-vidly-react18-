@@ -9,6 +9,7 @@ import UploadImage from "../../components/common/UploadImage/UploadImage";
 import { User } from "../../store/models/User.models";
 import { authActions } from "../../store/auth";
 import { toast } from "react-toastify";
+import { useRegisterMutation } from "../../store/authApi";
 const schema: { [key: string]: any } = {
   userName: Joi.string().email({ tlds: false }).required().label("Username"),
   password: Joi.string().min(5).required().label("Password"),
@@ -17,6 +18,7 @@ const schema: { [key: string]: any } = {
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [register, { isSuccess, isLoading }] = useRegisterMutation();
   const [registerData, setRegisterData] = useState<
     User & { file: File | null }
   >({
@@ -53,29 +55,24 @@ const Register: React.FC = () => {
       (prev) => (prev = { ...prev, [target.name]: target.value })
     );
   };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("name", registerData.name);
-      formData.append("userName", registerData.userName);
-      formData.append("password", registerData.password!);
-      formData.append("image", registerData.file!);
+    const formData = new FormData();
+    formData.append("name", registerData.name);
+    formData.append("userName", registerData.userName);
+    formData.append("password", registerData.password!);
+    formData.append("image", registerData.file!);
 
-      const response = await fetch("http://localhost:5000/api/user/register", {
-        method: "POST",
-        body: formData,
-      });
-      if (response.ok) {
-        const { user, token } = await response.json();
-        dispatch(authActions.login({ user: user, token: token }));
-        localStorage.setItem("token", token);
+    try {
+      const { user, token } = await register(formData).unwrap();
+      dispatch(authActions.login({ user: user, token: token }));
+      localStorage.setItem("token", token);
+      if (!isLoading) {
         navigate("/movies");
-      } else {
-        throw new Error("Error");
       }
-    } catch (error) {
-      return toast("Something when wrong", { type: "error" });
+    } catch (error: any) {
+      return toast(error.data.message, { type: "error" });
     }
   };
   const chooseImageHandler = (image: string, file: File | null) => {

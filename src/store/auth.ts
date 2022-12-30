@@ -1,5 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, ThunkAction } from "@reduxjs/toolkit";
 import { User } from "./models/User.models";
+import { RootState } from ".";
+import { customerApi } from "./orderApi";
 interface AuthState {
   currentUser: User | null;
   token: string | null;
@@ -25,3 +27,15 @@ const authSlice = createSlice({
 
 export const authActions = authSlice.actions;
 export default authSlice.reducer;
+
+export const logoutAndClearCache = (): ThunkAction<
+  void,
+  RootState,
+  any,
+  AnyAction
+> => {
+  return (dispatch) => {
+    dispatch(authActions.logout());
+    dispatch(customerApi.util.resetApiState());
+  };
+};

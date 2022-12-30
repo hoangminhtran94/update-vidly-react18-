@@ -36,19 +36,23 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
           </div>
           <div className={classes["actions"]}>
             <Button
+              disabled={!!(currentUser && data.userId === currentUser.id)}
               style={{ marginRight: "16px" }}
-              variant="primary"
+              variant={
+                !!(currentUser && data.userId === currentUser.id)
+                  ? "secondary"
+                  : "primary"
+              }
               onClick={() => {
                 currentUser
                   ? dispatchThunk(postACartItem(data.id, 1))
                   : setToggleModal(true);
               }}
             >
-              Add to buy cart +
+              {!!(currentUser && data.userId === currentUser.id)
+                ? "Your movie"
+                : "Add to buy cart +"}
             </Button>
-            {/* <Button variant="info" style={{ marginRight: "16px" }}>
-              Add to rental +
-            </Button> */}
           </div>
         </div>
       </div>

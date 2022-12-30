@@ -1,0 +1,12 @@
+.new-genre-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.edit-icon {
+  position: absolute;
+  right: 8px;
+  top: 0;
+  z-index: 88;
+  cursor: pointer;
+}

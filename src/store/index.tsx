@@ -16,6 +16,8 @@ import customerReducer, {
 import cartReducer, { initialState as CartInitialState } from "./cart";
 import { initialState as authInitialState } from "./auth";
 import chatboxReducer from "./chatbox";
+import { authApiSlice } from "./authApi";
+import { messageApiSlice } from "./messageApi";
 
 const combinedReducer = combineReducers({
   movie: movieReducer,
@@ -25,6 +27,8 @@ const combinedReducer = combineReducers({
   chatbox: chatboxReducer,
   [movieApiSlice.reducerPath]: movieApiSlice.reducer,
   [customerApi.reducerPath]: customerApi.reducer,
+  [authApiSlice.reducerPath]: authApiSlice.reducer,
+  [messageApiSlice.reducerPath]: messageApiSlice.reducer,
 });
 
 const rootReducer: Reducer = (
@@ -36,7 +40,6 @@ const rootReducer: Reducer = (
       ...state,
       cart: CartInitialState,
       auth: authInitialState,
-      customer: customerInitialState,
     };
   } else {
     return combinedReducer(state, action);
@@ -48,7 +51,9 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(movieApiSlice.middleware)
-      .concat(customerApi.middleware),
+      .concat(customerApi.middleware)
+      .concat(authApiSlice.middleware)
+      .concat(messageApiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof combinedReducer>;
