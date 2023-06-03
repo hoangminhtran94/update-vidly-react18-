@@ -85,7 +85,7 @@ const NavBar: React.FC<{ user: User | null }> = ({ user }) => {
             {user && (
               <NavDropdown
                 className={`${classes["user-profile"]}`}
-                title={user.userName}
+                title={user.username}
               >
                 <NavDropdown.Item
                   onClick={() => {

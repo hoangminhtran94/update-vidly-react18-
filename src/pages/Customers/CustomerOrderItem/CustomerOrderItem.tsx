@@ -36,7 +36,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
         >
           <p
             className={classes["customer-name"] + " m-0"}
-          >{`${data.userName}`}</p>
+          >{`${data.username}`}</p>
         </div>
         <div className="col-1 d-flex align-items-center text-success fw-bold">
           <p className={classes["status"] + " m-0"}> Pending</p>
@@ -76,7 +76,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
             </div>
             <div className="col-8">
               <h4>{data.name}</h4>
-              <p>{`Username: ${data.userName}`}</p>
+              <p>{`Username: ${data.username}`}</p>
               <p>Phone number:</p>
               <p>Shipping address:</p>
             </div>

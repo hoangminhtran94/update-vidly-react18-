@@ -47,6 +47,7 @@ const LoginForm: React.FC = () => {
       const { user, token } = await login(loginData).unwrap();
       dispatch(authActions.login({ user: user, token: token }));
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/movies");
     } catch (error: any) {
       toast(error.data.message, { type: "error" });

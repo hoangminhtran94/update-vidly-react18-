@@ -35,6 +35,7 @@ export const logoutAndClearCache = (): ThunkAction<
   AnyAction
 > => {
   return (dispatch) => {
+    localStorage.clear();
     dispatch(authActions.logout());
     dispatch(customerApi.util.resetApiState());
   };

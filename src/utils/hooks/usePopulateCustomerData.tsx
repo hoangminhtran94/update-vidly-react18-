@@ -23,7 +23,7 @@ const usePopulateOrderData = () => {
     return {
       ...order,
       name: currentUser?.name,
-      userName: currentUser?.userName,
+      username: currentUser?.username,
       customerImage: currentUser?.image,
     };
   });

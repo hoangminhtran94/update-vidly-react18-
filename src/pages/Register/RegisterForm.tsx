@@ -23,7 +23,7 @@ const Register: React.FC = () => {
     User & { file: File | null }
   >({
     id: "",
-    userName: "",
+    username: "",
     password: "",
     name: "",
     image: "",
@@ -60,7 +60,7 @@ const Register: React.FC = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", registerData.name);
-    formData.append("userName", registerData.userName);
+    formData.append("userName", registerData.username);
     formData.append("password", registerData.password!);
     formData.append("image", registerData.file!);
 
