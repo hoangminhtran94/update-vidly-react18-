@@ -35,10 +35,13 @@ const NavBar: React.FC<{ user: User | null }> = ({ user }) => {
             {user && (
               <>
                 <NavLink className="nav-item nav-link" to="/movies">
-                  Movies
+                  Your movies
                 </NavLink>
                 <NavLink className="nav-item nav-link" to="/customers">
                   Customers
+                </NavLink>
+                <NavLink className="nav-item nav-link" to="/your-orders">
+                  Your Orders
                 </NavLink>
               </>
             )}

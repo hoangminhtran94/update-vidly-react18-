@@ -8,7 +8,7 @@ import { RootState } from ".";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 export const customerApi = createApi({
   reducerPath: "customerApi",
-  tagTypes: ["customerData"],
+  tagTypes: ["customerData", "customers"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SERVER_API,
     prepareHeaders: (headers, { getState }) => {
@@ -24,7 +24,7 @@ export const customerApi = createApi({
   }),
   endpoints: (builder) => ({
     getCustomerOrders: builder.query<CustomerOrder[], void>({
-      query: (args) => ({ url: "movies/customer/order" }),
+      query: (args) => ({ url: "orders/customers" }),
       providesTags: ["customerData"],
     }),
   }),

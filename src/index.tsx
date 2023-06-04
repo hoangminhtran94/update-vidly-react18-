@@ -22,6 +22,7 @@ import MovieForm from "./pages/Movie/components/MovieForm/MovieForm";
 import Rentals from "./pages/Rentals/Rentals";
 import Register from "./pages/Register/RegisterForm";
 import NotFound from "./pages/NotFound/NotFound";
+import YourOrders from "./pages/Orders/Orders";
 const container = document.getElementById("root");
 const root = createRoot(container!);
 const router = createBrowserRouter(
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         <Route path="/customers" element={<Customer />} />
         <Route path="/rentals" element={<Rentals />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/your-orders" element={<YourOrders />} />
       </Route>
       <Route path="/not-found" element={<NotFound />} />
     </>
