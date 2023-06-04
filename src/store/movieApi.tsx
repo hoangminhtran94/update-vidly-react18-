@@ -7,7 +7,10 @@ export const movieApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SERVER_API,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
+      let token = (getState() as RootState).auth.token;
+      if (!token) {
+        token = localStorage.getItem("token");
+      }
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }

@@ -1,16 +1,20 @@
 import React from "react";
-import usePopulateOrderData from "./../../utils/hooks/usePopulateCustomerData";
+// import usePopulateOrderData from "./../../utils/hooks/usePopulateCustomerData";
 import CustomerOrderItem from "./CustomerOrderItem/CustomerOrderItem";
+import { useGetCustomerOrdersQuery } from "../../store/orderApi";
+import { OrderData } from "../../utils/hooks/usePopulateCustomerData";
 const Customer: React.FC = () => {
-  const orderData = usePopulateOrderData();
-  if (!orderData) {
-    return <></>;
-  }
+  const { data, error } = useGetCustomerOrdersQuery<{
+    data: OrderData[];
+    error: any;
+  }>();
+  console.log(data);
+
   return (
     <div className="container rounded shadow-sm p-4">
       <h1>Customers</h1>
       <div>
-        {orderData.length === 0 ? (
+        {!data || data.length === 0 ? (
           <h2>There's no customer</h2>
         ) : (
           <ul>
@@ -25,7 +29,7 @@ const Customer: React.FC = () => {
                 <div className="col-2"></div>
               </div>
             </li>
-            {orderData.map((order, index) => (
+            {data.map((order, index) => (
               <CustomerOrderItem data={order} key={index} />
             ))}
           </ul>
