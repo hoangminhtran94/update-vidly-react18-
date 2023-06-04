@@ -9,6 +9,7 @@ export interface Order {
   orderItems: OrderItem[];
   shoppingCartId: string;
   shoppingCart: ShoppingCart;
+  orderStatus: OrderStatus;
 }
 
 export interface OrderItem {
@@ -16,4 +17,9 @@ export interface OrderItem {
   quantity: number;
   movieId: String;
   movie: Movie;
+}
+
+export interface OrderStatus {
+  id: string;
+  name: string;
 }

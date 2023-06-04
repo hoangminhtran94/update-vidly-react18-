@@ -164,7 +164,7 @@ export const loader = async () => {
   }
 
   if (!user || !token) {
-    return redirect("/");
+    return redirect("/login");
   }
   return null;
 };

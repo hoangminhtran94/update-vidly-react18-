@@ -48,7 +48,9 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               >{`${data.shoppingCart.owner.username}`}</p>
             </div>
             <div className="col-1 d-flex align-items-center text-success fw-bold">
-              <p className={classes["status"] + " m-0"}> Pending</p>
+              <p className={classes["status"] + " m-0"}>
+                {data.orderStatus.name}
+              </p>
             </div>
             <div
               className={

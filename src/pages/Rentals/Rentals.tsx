@@ -6,7 +6,7 @@ import ListGroup from "../../components/common/ListGroup/ListGroup";
 import { useDispatch } from "react-redux";
 import { movieActions } from "../../store/movies";
 import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieApi";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { User } from "../../store/models/User.models";
 const Rentals = () => {
   const dispatch = useDispatch();
@@ -65,31 +65,51 @@ const Rentals = () => {
       </div>
       {currentUser && (
         <div className="row my-4">
-          <div className="col d-flex justify-content-end">
+          <div className="col d-flex gap-4 justify-content-end">
             <Form.Select
               className="w-25"
-              defaultValue="availableMovies"
               onChange={(e) => {
-                setFilterValue((e.target as HTMLSelectElement).value);
+                handleGenreChange(e.target.value);
               }}
             >
-              <option value="allMovies">All movies</option>
-              <option value="availableMovies">Available movies</option>
-              <option value="yourMovies">Your movies</option>
+              <option value="all">All Genre</option>
+              {genre.map((genre) => (
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
+                </option>
+              ))}
             </Form.Select>
+            <Button
+              variant="outline-success"
+              onClick={() => {
+                setFilterValue("availableMovies");
+              }}
+              value="availableMovies"
+            >
+              Available movies
+            </Button>
+            <Button
+              variant="outline-warning"
+              onClick={() => {
+                setFilterValue("allMovies");
+              }}
+            >
+              All movies
+            </Button>
+            <Button
+              variant="outline-dark"
+              onClick={() => {
+                setFilterValue("yourMovies");
+              }}
+              value="yourMovies"
+            >
+              Your movies
+            </Button>
           </div>
         </div>
       )}
       <div className="row">
-        <div className="col-3">
-          <ListGroup
-            genreCount={genre.length}
-            genre={genre}
-            currentGenre={currentGenre}
-            onGenreChange={handleGenreChange}
-          />
-        </div>
-        <div className="col-9">
+        <div className="grid grid-cols-3 gap-5">
           {filteredMoviesByList.length === 0 ? (
             <h1>No movie available</h1>
           ) : (

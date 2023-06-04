@@ -20,15 +20,15 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
   );
   return (
     <div
-      className={`container mb-3 mt-3 p-3 ${classes["movie-box-container"]}`}
+      className={`container mb-3 mt-3 p-3 hover:scale-105 transition-all cursor-pointer ${classes["movie-box-container"]}`}
     >
-      <div className="row">
-        <div className="col-3 d-flex justify-content-center">
+      <div className="flex gap-3">
+        <div className="d-flex justify-content-center">
           <div className={classes["image-container"]}>
             <img alt="movieImage" src={`http://localhost:5000/${data.image}`} />
           </div>
         </div>
-        <div className="col">
+        <div className="flex-1 flex flex-col justify-between">
           <h3>{data.title}</h3>
           <div className={classes["movie-details"]}>
             <p className={classes["description"]}>{data.description}</p>
@@ -37,7 +37,7 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
           <div className={classes["actions"]}>
             <Button
               disabled={!!(currentUser && data.ownerId === currentUser.id)}
-              style={{ marginRight: "16px" }}
+              size="sm"
               variant={
                 !!(currentUser && data.ownerId === currentUser.id)
                   ? "secondary"

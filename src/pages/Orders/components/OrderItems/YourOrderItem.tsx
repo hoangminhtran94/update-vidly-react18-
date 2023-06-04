@@ -47,7 +47,9 @@ const YourOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               {item.movie.owner!.username}
             </div>
             <div className="col-1 d-flex align-items-center text-success fw-bold">
-              <p className={classes["status"] + " m-0"}> Pending</p>
+              <p className={classes["status"] + " m-0"}>
+                {data.orderStatus.name}
+              </p>
             </div>
             <div
               className={
