@@ -1,3 +1,5 @@
+import { User } from "./User.models";
+
 export interface Movie {
   id: string;
   title: string;
@@ -11,6 +13,7 @@ export interface Movie {
   description: string;
   image: string;
   ownerId: string;
+  owner?: User;
 }
 
 export interface Genre {

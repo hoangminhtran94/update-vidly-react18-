@@ -6,11 +6,12 @@ import {
 import { CustomerOrder, User } from "./models/User.models";
 import { RootState } from ".";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
+import { Order } from "./models/Order.model";
 export const customerApi = createApi({
   reducerPath: "customerApi",
-  tagTypes: ["customerData", "customers"],
+  tagTypes: ["customerData", "yourOrders"],
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SERVER_API,
+    baseUrl: process.env.REACT_APP_SERVER_API + "orders",
     prepareHeaders: (headers, { getState }) => {
       let token = (getState() as RootState).auth.token;
       if (!token) {
@@ -24,10 +25,14 @@ export const customerApi = createApi({
   }),
   endpoints: (builder) => ({
     getCustomerOrders: builder.query<CustomerOrder[], void>({
-      query: (args) => ({ url: "orders/customers" }),
+      query: (args) => ({ url: "/customers" }),
       providesTags: ["customerData"],
+    }),
+    getYourOrders: builder.query<Order[], void>({
+      query: (args) => ({ url: "/" }),
+      providesTags: ["yourOrders"],
     }),
   }),
 });
 
-export const { useGetCustomerOrdersQuery } = customerApi;
+export const { useGetCustomerOrdersQuery, useGetYourOrdersQuery } = customerApi;

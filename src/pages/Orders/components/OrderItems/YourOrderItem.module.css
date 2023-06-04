@@ -1,0 +1,21 @@
+/* .profile-image {
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  cursor: pointer;
+} */
+
+.order-actions {
+  justify-content: center;
+}
+.order-actions button {
+  height: 40px;
+}
+
+.status,
+.customer-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
