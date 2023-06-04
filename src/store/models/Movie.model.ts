@@ -10,7 +10,7 @@ export interface Movie {
   isClick?: boolean;
   description: string;
   image: string;
-  userId: string;
+  ownerId: string;
 }
 
 export interface Genre {

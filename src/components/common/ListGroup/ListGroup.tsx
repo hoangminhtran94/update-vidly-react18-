@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import GenreModal from "./GenreModal/GenreModal";
 import { useLocation } from "react-router-dom";
+import { User } from "../../../store/models/User.models";
 interface ListGroupProps {
   genre: Genre[];
   genreCount: number;
@@ -15,8 +16,8 @@ interface ListGroupProps {
 const ListGroup: React.FC<ListGroupProps> = (props) => {
   const location = useLocation();
 
-  const token = useSelector<RootState, string | null>(
-    (state) => state.auth.token
+  const user = useSelector<RootState, User | null>(
+    (state) => state.auth.currentUser
   );
   const { genre, genreCount, currentGenre, onGenreChange } = props;
   const [data, setData] = useState<Genre | undefined>();
@@ -61,7 +62,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
             {g.name}
           </p>
 
-          {token && location.pathname !== "/rentals" && (
+          {user && location.pathname !== "/rentals" && (
             <span
               className={classes["edit-icon"]}
               onClick={() => {
@@ -83,7 +84,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
           )}
         </li>
       ))}
-      {token && location.pathname !== "/rentals" && (
+      {user && location.pathname !== "/rentals" && (
         <li
           key="new-genre"
           style={{ cursor: "pointer" }}

@@ -1,7 +1,6 @@
 import { createSlice, ThunkAction, AnyAction } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import { Genre, Movie } from "./models/Movie.model";
-import { getMovies } from "./../services/movieService";
 import { toast } from "react-toastify";
 
 export interface MovieState {

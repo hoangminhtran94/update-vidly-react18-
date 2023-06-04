@@ -7,7 +7,6 @@ interface InputProps extends FormControlProps {
   name: string;
   label: string;
   error: string;
-  value?: string | number;
   type?: string;
 }
 
@@ -24,7 +23,6 @@ const Input: React.FC<InputProps> = ({
       <Form.Control
         {...rest}
         as="input"
-        value={value}
         type={type}
         name={name}
         className="mb-2"

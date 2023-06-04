@@ -12,6 +12,8 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { loader as homeLoader } from "./pages/Home/Home";
+import { loader as movieLoader } from "./pages/Movie/Movies";
+
 import Movies from "./pages/Movie/Movies";
 import Home from "./pages/Home/Home";
 import LoginForm from "./pages/Login/LoginForm";
@@ -27,7 +29,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Home />} loader={homeLoader}>
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/movies" element={<Movies />} />
+        <Route path="/movies" element={<Movies />} loader={movieLoader} />
         <Route path="/movies/:id" element={<MovieForm />} />
         <Route path="/customers" element={<Customer />} />
         <Route path="/rentals" element={<Rentals />} />

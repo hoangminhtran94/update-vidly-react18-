@@ -3,7 +3,7 @@ import { Movie, Genre } from "./models/Movie.model";
 import { RootState } from ".";
 export const movieApiSlice = createApi({
   reducerPath: "movieApi",
-  tagTypes: ["movieData"],
+  tagTypes: ["movieData", "publicMovieData"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SERVER_API,
     prepareHeaders: (headers, { getState }) => {
@@ -20,6 +20,10 @@ export const movieApiSlice = createApi({
   endpoints: (builder) => ({
     getMovies: builder.query<Movie[], void>({
       query: () => ({ url: "movies" }),
+      providesTags: ["publicMovieData"],
+    }),
+    getYourMovies: builder.query<Movie[], void>({
+      query: () => ({ url: "movies/your-movies" }),
       providesTags: ["movieData"],
     }),
     getGenres: builder.query<Genre[], void>({
@@ -78,4 +82,5 @@ export const {
   useUpdateAMovieMutation,
   useAddAGenreMutation,
   useEditAGenreMutation,
+  useGetYourMoviesQuery,
 } = movieApiSlice;

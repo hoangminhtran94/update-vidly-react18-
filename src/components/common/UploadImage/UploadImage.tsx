@@ -3,9 +3,10 @@ import classes from "./UploadImage.module.css";
 interface UploadImageProps {
   getImage: (image: string, file: File | null) => void;
   image?: string;
+  name?: string;
 }
 
-const UploadImage: React.FC<UploadImageProps> = ({ getImage, image }) => {
+const UploadImage: React.FC<UploadImageProps> = ({ getImage, image, name }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImage] = useState<string>(image || "");
   const [file, setFile] = useState<File | null>(null);
@@ -35,6 +36,8 @@ const UploadImage: React.FC<UploadImageProps> = ({ getImage, image }) => {
       )}
       <input
         type="file"
+        name={name}
+        multiple={false}
         ref={inputRef}
         accept={".jpg,.jpeg,.png"}
         onChange={(e) => {

@@ -19,50 +19,15 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [register, { isSuccess, isLoading }] = useRegisterMutation();
-  const [registerData, setRegisterData] = useState<
-    User & { file: File | null }
-  >({
-    id: "",
-    username: "",
-    password: "",
-    name: "",
+  const [image, setImage] = useState<{ image: string; file: File | null }>({
     image: "",
     file: null,
   });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({
-    userName: "",
-    password: "",
-    name: "",
-  });
-  const validateProperty = ({
-    name,
-    value,
-  }: {
-    name: string;
-    value: string;
-  }) => {
-    const { error } = schema[name].validate(value);
-    return error ? error.details[0].message : "n/a";
-  };
-  const onChangeHandler = ({
-    target,
-  }: ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  >) => {
-    const errorMessage = validateProperty(target);
-    setErrors((prev) => (prev = { ...prev, [target.name]: errorMessage }));
-    setRegisterData(
-      (prev) => (prev = { ...prev, [target.name]: target.value })
-    );
-  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", registerData.name);
-    formData.append("userName", registerData.username);
-    formData.append("password", registerData.password!);
-    formData.append("image", registerData.file!);
+    const formData = new FormData(e.target as HTMLFormElement);
+    formData.append("image", image.file ?? "");
 
     try {
       const { user, token } = await register(formData).unwrap();
@@ -76,41 +41,18 @@ const Register: React.FC = () => {
     }
   };
   const chooseImageHandler = (image: string, file: File | null) => {
-    setRegisterData((prev) => (prev = { ...prev, image: image, file: file }));
+    setImage({ image: image, file: file });
   };
   return (
     <div className={`${classes["regiter-container"]} p-4 rounded`}>
       <h1>Register</h1>
       <form className={classes["regiter-form"]} onSubmit={handleSubmit}>
-        <UploadImage image={registerData.image} getImage={chooseImageHandler} />
-        <Input
-          name="userName"
-          label="UserName"
-          type="email"
-          error={errors.userName}
-          onChange={onChangeHandler}
-        />
-        <Input
-          name="password"
-          label="Password"
-          type="password"
-          error={errors.password}
-          onChange={onChangeHandler}
-        />
-        <Input
-          name="name"
-          label="Name"
-          type="text"
-          error={errors.name}
-          onChange={onChangeHandler}
-        />
+        <UploadImage image={image.image} getImage={chooseImageHandler} />
+        <Input name="userName" label="UserName" type="email" error={""} />
+        <Input name="password" label="Password" type="password" error={""} />
+        <Input name="name" label="Name" type="text" error={""} />
 
-        <button
-          className="btn btn-primary"
-          disabled={!Object.values(errors).every((item) => item === "n/a")}
-        >
-          Register
-        </button>
+        <button className="btn btn-primary">Register</button>
       </form>
     </div>
   );

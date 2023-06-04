@@ -1,5 +1,6 @@
-ul {
-  list-style-type: none;
+ul,
+li {
+  list-style-type: none !important;
 }
 .modal-enter {
   transform: translateY(-200px);

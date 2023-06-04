@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import auth from "../../../services/authService";
 import Like from "../../../components/common/Like/Like";
 import Table from "../../../components/common/Table/Table";
 import { Movie } from "../../../store/models/Movie.model";
@@ -60,7 +59,7 @@ const MoviesTable: React.FC<MovieTableProps> = (props) => {
   ]);
 
   useEffect(() => {
-    const user: any = auth.getCurrentUser();
+    // const user: any = auth.getCurrentUser();
     // if (user && user.isAdmin) {
     //   setColumn(
     //     (prev) =>

@@ -1,60 +1,71 @@
 import React, { useLayoutEffect, useState, useRef } from "react";
 import { Button, Image } from "react-bootstrap";
 import Modal from "../../../components/common/Modal/Modal";
-import { OrderData } from "../../../utils/hooks/usePopulateCustomerData";
+
 import classes from "./CustomerOrderItem.module.css";
+import { Order } from "../../../store/models/Order.model";
 
 interface CustomerOrderItemProps {
-  data: OrderData;
+  data: Order;
 }
 const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
   const [toggleViewCustomer, setToggleViewCustomer] = useState(false);
+  if (data.orderItems.length === 0) {
+    return <h2>Not available</h2>;
+  }
+
   return (
-    <li className="container shadow-sm p-3 mb-4 rounded">
-      <div className="row d-flex">
-        <div className="col-1  d-flex align-items-center">
-          <Image
-            className="shadow-sm h-100"
-            src={"http://localhost:5000/" + data.image}
-            rounded
-            thumbnail
-          />
-        </div>
-        <div className="col-2 d-flex align-items-center">{data.title}</div>
-        <div className="col-1 d-flex align-items-center ">
-          {`${data.quantity} x ${data.dailyRentalRate}`}
-        </div>
-        <div className="col-2 d-flex align-items-center ">
-          {`Total: $${data.quantity * data.dailyRentalRate}`}
-        </div>
-        <div
-          className="col-3 d-flex align-items-center"
-          style={{ gap: "8px", cursor: "pointer" }}
-          onClick={() => {
-            setToggleViewCustomer(true);
-          }}
-        >
-          <p
-            className={classes["customer-name"] + " m-0"}
-          >{`${data.username}`}</p>
-        </div>
-        <div className="col-1 d-flex align-items-center text-success fw-bold">
-          <p className={classes["status"] + " m-0"}> Pending</p>
-        </div>
-        <div
-          className={
-            classes["order-actions"] + " col-2 d-flex align-items-center"
-          }
-          style={{ gap: "8px", flexWrap: "wrap" }}
-        >
-          <Button variant="success" size="sm">
-            Ship
-          </Button>
-          <Button variant="danger" size="sm">
-            Cancel
-          </Button>
-        </div>
-      </div>
+    <>
+      {data.orderItems.map((item) => (
+        <li key={item.id} className="container shadow-sm p-3 mb-4 rounded">
+          <div className="row d-flex">
+            <div className="col-1  d-flex align-items-center">
+              <Image
+                className="shadow-sm h-100"
+                src={"http://localhost:5000/" + item.movie.image}
+                rounded
+                thumbnail
+              />
+            </div>
+            <div className="col-2 d-flex align-items-center">
+              {item.movie.title}
+            </div>
+            <div className="col-1 d-flex align-items-center ">
+              {`${item.quantity} x ${item.movie.dailyRentalRate}`}
+            </div>
+            <div className="col-2 d-flex align-items-center ">
+              {`Total: $${item.quantity * item.movie.dailyRentalRate}`}
+            </div>
+            <div
+              className="col-3 d-flex align-items-center"
+              style={{ gap: "8px", cursor: "pointer" }}
+              onClick={() => {
+                setToggleViewCustomer(true);
+              }}
+            >
+              <p
+                className={classes["customer-name"] + " m-0"}
+              >{`${data.shoppingCart.owner.username}`}</p>
+            </div>
+            <div className="col-1 d-flex align-items-center text-success fw-bold">
+              <p className={classes["status"] + " m-0"}> Pending</p>
+            </div>
+            <div
+              className={
+                classes["order-actions"] + " col-2 d-flex align-items-center"
+              }
+              style={{ gap: "8px", flexWrap: "wrap" }}
+            >
+              <Button variant="success" size="sm">
+                Ship
+              </Button>
+              <Button variant="danger" size="sm">
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </li>
+      ))}
       <Modal
         toggle={toggleViewCustomer}
         onClick={() => {
@@ -69,14 +80,14 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
             <div className="col-4">
               <Image
                 className="shadow-sm"
-                src={"http://localhost:5000/" + data.customerImage}
+                src={"http://localhost:5000/" + data.shoppingCart.owner.image}
                 rounded
                 fluid
               />
             </div>
             <div className="col-8">
-              <h4>{data.name}</h4>
-              <p>{`Username: ${data.username}`}</p>
+              <h4>{data.shoppingCart.owner.name}</h4>
+              <p>{`Username: ${data.shoppingCart.owner.username}`}</p>
               <p>Phone number:</p>
               <p>Shipping address:</p>
             </div>
@@ -102,7 +113,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
           </div>
         </div>
       </Modal>
-    </li>
+    </>
   );
 };
 

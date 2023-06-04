@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
-
+import { redirect } from "react-router-dom";
 import MoviesTable from "./components/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,9 +20,10 @@ import {
   useGetGenresQuery,
   useGetMoviesQuery,
   useDeleteMovieMutation,
+  useGetYourMoviesQuery,
 } from "../../store/movieApi";
 const Movies: React.FC = () => {
-  const { data: movies, error } = useGetMoviesQuery();
+  const { data: movies, error } = useGetYourMoviesQuery();
   const { data: genre } = useGetGenresQuery();
   const [deleteMovie] = useDeleteMovieMutation();
   const {
@@ -55,21 +56,18 @@ const Movies: React.FC = () => {
   };
   //Temporary movies
 
-  const temporaryMovies =
-    movies && movies.filter((movie) => movie.userId === currentUser.id);
-
   const filtered = useMemo(() => {
-    if (!temporaryMovies) {
+    if (!movies) {
       return [];
     }
     return searchQuery
-      ? temporaryMovies.filter((m) =>
+      ? movies.filter((m) =>
           m.title.toLowerCase().match(searchQuery.toLowerCase())
         )
       : currentGenre === "all"
-      ? temporaryMovies
-      : temporaryMovies.filter((movie) => movie.genreId === currentGenre);
-  }, [currentGenre, searchQuery, temporaryMovies]);
+      ? movies
+      : movies.filter((movie) => movie.genreId === currentGenre);
+  }, [currentGenre, movies, searchQuery]);
 
   const sorted = useMemo(
     () =>
@@ -152,3 +150,21 @@ const Movies: React.FC = () => {
 };
 
 export default Movies;
+
+export const loader = async () => {
+  const token = localStorage.getItem("token");
+  let user = null;
+  try {
+    const data = await fetch("http://localhost:5000/api/user/validate-token", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    user = await data.json();
+  } catch (e) {
+    return redirect("/");
+  }
+
+  if (!user || !token) {
+    return redirect("/");
+  }
+  return null;
+};

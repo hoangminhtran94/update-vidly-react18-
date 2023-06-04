@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import ChatBox from "./../../components/ChatBox/ChatBox";
 import ChatBoxIcon from "../../components/ChatBoxIcon/ChatBoxIcon";
 import { authActions } from "../../store/auth";
+import "../../App.css";
+import "react-toastify/dist/ReactToastify.css";
 const Home = () => {
   const loaderData = useLoaderData();
   const dispatch = useDispatch();

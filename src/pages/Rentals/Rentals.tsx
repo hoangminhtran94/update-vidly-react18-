@@ -36,13 +36,13 @@ const Rentals = () => {
       return movie;
     }
     if (filterValue === "availableMovies") {
-      return movie.userId !== currentUser.id;
+      return movie.ownerId !== currentUser.id;
     }
     if (filterValue === "allMovies") {
       return movie;
     }
     if (filterValue === "yourMovies") {
-      return movie.userId === currentUser.id;
+      return movie.ownerId === currentUser.id;
     }
   });
 

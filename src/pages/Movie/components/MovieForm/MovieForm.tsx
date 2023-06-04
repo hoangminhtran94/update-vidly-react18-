@@ -1,6 +1,4 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
-import { getGenres } from "../../../../services/genreService";
-import { getMovie, saveMovie } from "../../../../services/movieService";
 import Joi from "joi";
 import { useNavigate, useParams } from "react-router-dom";
 import { Genre, Movie } from "../../../../store/models/Movie.model";
@@ -64,7 +62,7 @@ const MovieForm: React.FC = () => {
     numberInStock: currentMovie?.numberInStock || 0,
     genreId: currentMovie?.genreId || "",
     file: null,
-    userId: currentUser.id,
+    ownerId: currentUser.id,
   };
   const [movieData, setMovieData] = useState<Movie & { file: File | null }>(
     initialMovieData
