@@ -63,51 +63,57 @@ const Rentals = () => {
       <div className="row">
         <h1 className="text-secondary p-3">Rentals</h1>
       </div>
-      {currentUser && (
-        <div className="row my-4">
-          <div className="col d-flex gap-4 justify-content-end">
-            <Form.Select
-              className="w-25"
-              onChange={(e) => {
-                handleGenreChange(e.target.value);
-              }}
-            >
-              <option value="all">All Genre</option>
-              {genre.map((genre) => (
-                <option key={genre.id} value={genre.id}>
-                  {genre.name}
-                </option>
-              ))}
-            </Form.Select>
-            <Button
-              variant="outline-success"
-              onClick={() => {
-                setFilterValue("availableMovies");
-              }}
-              value="availableMovies"
-            >
-              Available movies
-            </Button>
-            <Button
-              variant="outline-warning"
-              onClick={() => {
-                setFilterValue("allMovies");
-              }}
-            >
-              All movies
-            </Button>
-            <Button
-              variant="outline-dark"
-              onClick={() => {
-                setFilterValue("yourMovies");
-              }}
-              value="yourMovies"
-            >
-              Your movies
-            </Button>
-          </div>
+
+      <div className="row my-4">
+        <div className="col d-flex gap-4 justify-content-end">
+          <Form.Select
+            className="w-25"
+            onChange={(e) => {
+              handleGenreChange(e.target.value);
+            }}
+          >
+            <option value="all">All Genre</option>
+            {genre.map((genre) => (
+              <option key={genre.id} value={genre.id}>
+                {genre.name}
+              </option>
+            ))}
+          </Form.Select>
+          {currentUser && (
+            <>
+              <Button
+                variant="outline-success"
+                onClick={() => {
+                  setFilterValue("availableMovies");
+                }}
+                value="availableMovies"
+              >
+                Available movies
+              </Button>
+
+              <Button
+                variant="outline-warning"
+                onClick={() => {
+                  setFilterValue("allMovies");
+                }}
+              >
+                All movies
+              </Button>
+
+              <Button
+                variant="outline-dark"
+                onClick={() => {
+                  setFilterValue("yourMovies");
+                }}
+                value="yourMovies"
+              >
+                Your movies
+              </Button>
+            </>
+          )}
         </div>
-      )}
+      </div>
+
       <div className="row">
         <div className="grid grid-cols-3 gap-5">
           {filteredMoviesByList.length === 0 ? (

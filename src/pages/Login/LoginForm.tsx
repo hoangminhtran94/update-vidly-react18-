@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
       <form className={classes["login-form"]} onSubmit={handleSubmit}>
         <Input
           name="userName"
-          label="UserName"
+          label="Username/Email"
           type="email"
           error={errors.userName}
           onChange={onChangeHandler}

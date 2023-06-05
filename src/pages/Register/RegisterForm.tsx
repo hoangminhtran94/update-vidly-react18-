@@ -50,8 +50,10 @@ const Register: React.FC = () => {
         <UploadImage image={image.image} getImage={chooseImageHandler} />
         <Input name="userName" label="UserName" type="email" error={""} />
         <Input name="password" label="Password" type="password" error={""} />
-        <Input name="name" label="Name" type="text" error={""} />
-
+        <Input name="firstName" label="First Name" type="text" error={""} />
+        <Input name="lastName" label="Last Name" type="text" error={""} />
+        <Input name="phoneNumber" label="Phone Number" type="text" error={""} />
+        <Input name="address" label="Address" type="text" error={""} />
         <button className="btn btn-primary">Register</button>
       </form>
     </div>

@@ -3,7 +3,10 @@ export interface User {
   image: string;
   username: string;
   password?: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
 }
 
 export interface CustomerOrder {

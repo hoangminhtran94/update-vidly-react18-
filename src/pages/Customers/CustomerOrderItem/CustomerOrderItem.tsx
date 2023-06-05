@@ -88,7 +88,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               />
             </div>
             <div className="col-8">
-              <h4>{data.shoppingCart.owner.name}</h4>
+              <h4>{`${data.shoppingCart.owner.firstName} ${data.shoppingCart.owner.lastName}`}</h4>
               <p>{`Username: ${data.shoppingCart.owner.username}`}</p>
               <p>Phone number:</p>
               <p>Shipping address:</p>
