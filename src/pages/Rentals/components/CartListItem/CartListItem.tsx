@@ -2,23 +2,19 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { CartItem } from "../../../../store/models/CartItem.modules";
 import classes from "./CartListItem.module.css";
-import { deleteCartItem, postACartItem } from "./../../../../store/cart";
-import { useTypedDispatch } from "../../../../store";
-import { useGetMoviesQuery } from "../../../../store/movieApi";
+import {
+  usePostCartItemMutation,
+  useDeleteCartItemMutation,
+} from "../../../../store/cartApi";
+
 interface CartItemProps {
   item: CartItem;
 }
 
 const CartListItem: React.FC<CartItemProps> = ({ item }) => {
-  const dispatchThunk = useTypedDispatch();
-  const { data: movies, isLoading: movieIsLoading } = useGetMoviesQuery();
-  if (!movies) {
-    return <></>;
-  }
-  const currentMovie = movies.find((movie) => movie.id === item.movieId);
-  if (!currentMovie) {
-    return <></>;
-  }
+  const [postCartItem] = usePostCartItemMutation();
+  const [deletCartItem] = useDeleteCartItemMutation();
+
   return (
     <div
       className={`container rounded p-3 mb-2 ${classes["cart-item-container"]}`}
@@ -29,8 +25,8 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
           size="sm"
           className="d-flex align-items-center justify-content-center p-1 rounded-circle"
           style={{ width: "25px" }}
-          onClick={async () => {
-            await dispatchThunk(deleteCartItem(item.id));
+          onClick={() => {
+            deletCartItem(item.movieId);
           }}
         >
           <svg
@@ -49,7 +45,7 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
         <div className="col-3">
           <div className={classes["cart-item-image"]}>
             <img
-              src={"http://localhost:5000/" + currentMovie.image}
+              src={"http://localhost:5000/" + item.movie.image}
               alt="cartImage"
               className="rounded"
             />
@@ -57,15 +53,15 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
         </div>
         <div className="col-4">
           <p className="fw-bold mb-2">Title</p>
-          <p className="m-0">{currentMovie.title}</p>
+          <p className="m-0">{item.movie.title}</p>
         </div>
         <div className="col-3 p-0">
           <p className="fw-bold mb-2">Quantity</p>
           <div className={classes["quantity-form-group"] + " d-flex rounded"}>
             <button
               className={`${classes["substitute-button"]}`}
-              onClick={async () => {
-                dispatchThunk(postACartItem(item.movieId, -1));
+              onClick={() => {
+                postCartItem({ movieId: item.movieId, quantity: -1 });
               }}
             >
               -
@@ -73,8 +69,8 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
             <input className="form-control m-0 mx-0" value={item.quantity} />
             <button
               className={`${classes["increment-button"]}`}
-              onClick={async () => {
-                dispatchThunk(postACartItem(item.movieId, 1));
+              onClick={() => {
+                postCartItem({ movieId: item.movieId, quantity: 1 });
               }}
             >
               +
@@ -83,9 +79,7 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
         </div>
         <div className="col-2">
           <p className="fw-bold mb-2">Price</p>
-          <p className="m-0">
-            ${item.quantity! * currentMovie.dailyRentalRate}
-          </p>
+          <p className="m-0">${item.quantity! * item.movie.dailyRentalRate}</p>
         </div>
       </div>
     </div>

@@ -2,37 +2,38 @@ import React, { useState } from "react";
 import classes from "./MovieBox.module.css";
 import { Button } from "react-bootstrap";
 import { Movie } from "../../../../store/models/Movie.model";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import { User } from "../../../../store/models/User.models";
-import Modal from "../../../../components/common/Modal/Modal";
-import { cartActions, postACartItem } from "../../../../store/cart";
-import { TypedDispatch } from "../../../../store";
 import { useTypedDispatch } from "./../../../../store/index";
+import { usePostCartItemMutation } from "../../../../store/cartApi";
 interface MovieBoxProps {
   data: Movie;
 }
 const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
-  const [toggleModal, setToggleModal] = useState(false);
+  const [postCartItem] = usePostCartItemMutation();
   const dispatchThunk = useTypedDispatch();
   const currentUser = useSelector<RootState, User | null>(
     (state) => state.auth.currentUser
   );
   return (
     <div
-      className={`container mb-3 mt-3 p-3 hover:scale-105 transition-all cursor-pointer ${classes["movie-box-container"]}`}
+      className={`container mb-3 mt-3 p-3 hover:scale-105 transition-all cursor-pointer bg-dark-gradient ${classes["movie-box-container"]}`}
     >
       <div className="flex gap-3">
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center flex-col gap-2 justify-between">
           <div className={classes["image-container"]}>
             <img alt="movieImage" src={`http://localhost:5000/${data.image}`} />
           </div>
+          <p className={classes["price"]}>${data.dailyRentalRate}/day</p>
+          <p>{data.numberInStock} in stock</p>
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <h3>{data.title}</h3>
           <div className={classes["movie-details"]}>
-            <p className={classes["description"]}>{data.description}</p>
-            <p className={classes["price"]}>${data.dailyRentalRate}/day</p>
+            <p className={`${classes["description"]} flex-1 line-clamp-6`}>
+              {data.description}
+            </p>
           </div>
           <div className={classes["actions"]}>
             <Button
@@ -44,9 +45,7 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
                   : "primary"
               }
               onClick={() => {
-                currentUser
-                  ? dispatchThunk(postACartItem(data.id, 1))
-                  : setToggleModal(true);
+                postCartItem({ movieId: data.id, quantity: 1 });
               }}
             >
               {!!(currentUser && data.ownerId === currentUser.id)
@@ -56,15 +55,6 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
           </div>
         </div>
       </div>
-      <Modal
-        toggle={toggleModal}
-        onClick={() => {
-          setToggleModal(false);
-        }}
-      >
-        <h1>You are not logged in. Login now?</h1>
-        <Button variant="primary">To login</Button>
-      </Modal>
     </div>
   );
 };

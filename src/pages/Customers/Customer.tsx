@@ -10,7 +10,7 @@ const Customer: React.FC = () => {
   }>();
 
   return (
-    <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+    <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white text-slate-600">
       <h1>Customers</h1>
       <div>
         {!data || data.length === 0 ? (

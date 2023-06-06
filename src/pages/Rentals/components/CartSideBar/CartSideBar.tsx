@@ -8,15 +8,20 @@ import { cartActions } from "../../../../store/cart";
 import { CartItem } from "../../../../store/models/CartItem.modules";
 import CartListItem from "../CartListItem/CartListItem";
 import classes from "./CartSideBar.module.css";
-import { useTypedDispatch } from "../../../../store";
-import { checkout } from "../../../../store/cart";
+
+import {
+  useCheckoutMutation,
+  useGetCartItemsQuery,
+} from "../../../../store/cartApi";
 const CartSideBar: React.FC = () => {
   const dispatch = useDispatch();
-  const dispatchThunk = useTypedDispatch();
+
   const toggle = useSelector<RootState, boolean>((state) => state.cart.toggle);
-  const cartItems = useSelector<RootState, CartItem[]>(
-    (state) => state.cart.cartItems
-  );
+  const { data, error } = useGetCartItemsQuery<{
+    data: CartItem[];
+    error: any;
+  }>();
+  const [checkout] = useCheckoutMutation();
 
   return (
     <Offcanvas
@@ -33,21 +38,19 @@ const CartSideBar: React.FC = () => {
         className="d-flex align-items-center"
         style={{ flexDirection: "column", gap: "8px" }}
       >
-        {cartItems.length === 0 ? (
+        {data?.length === 0 ? (
           <h2>No items in to cart</h2>
         ) : (
-          cartItems.map((item, index) => (
-            <CartListItem key={index} item={item} />
-          ))
+          data?.map((item, index) => <CartListItem key={index} item={item} />)
         )}
-        {cartItems.length > 0 && (
+        {data?.length > 0 && (
           <Button
             variant="secondary"
             className={
               classes["checkout-button"] + " w-50 d-flex align-items-center"
             }
             onClick={async () => {
-              dispatchThunk(checkout());
+              checkout();
             }}
             style={{ gap: "8px" }}
           >

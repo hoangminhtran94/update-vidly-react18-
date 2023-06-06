@@ -7,7 +7,6 @@ import { User } from "../../store/models/User.models";
 import CartSideBar from "../Rentals/components/CartSideBar/CartSideBar";
 import { useEffect } from "react";
 import { useTypedDispatch } from "../../store";
-import { getCart } from "../../store/cart";
 import { useDispatch } from "react-redux";
 import ChatBox from "../../components/ChatBox/ChatBox";
 import ChatBoxIcon from "../../components/ChatBoxIcon/ChatBoxIcon";
@@ -23,7 +22,6 @@ const Layout = () => {
   const toggle = useSelector<RootState, boolean>(
     (state) => state.chatbox.toggle
   );
-  const dispatchThunk = useTypedDispatch();
 
   useEffect(() => {
     if (loaderData) {

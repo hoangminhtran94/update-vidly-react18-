@@ -123,7 +123,7 @@ const Rentals = () => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row text-slate-600">
         <div className="grid grid-cols-3 gap-5">
           {filteredMoviesByList?.length === 0 ? (
             <h1>No movie available</h1>

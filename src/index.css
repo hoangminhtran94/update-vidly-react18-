@@ -9,6 +9,9 @@
   .bg-deep-blue {
     @apply bg-gradient-to-r from-cyan-800 to-indigo-900;
   }
+  .bg-dark-gradient {
+    @apply bg-gradient-to-r from-slate-50 to-red-50 shadow-md;
+  }
 }
 
 body {
@@ -23,6 +26,9 @@ body {
 
 * {
   font-family: "Josefin Sans", sans-serif;
+}
+p {
+  margin: 0 !important;
 }
 
 *::-webkit-scrollbar {
