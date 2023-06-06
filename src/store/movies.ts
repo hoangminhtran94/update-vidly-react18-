@@ -7,16 +7,16 @@ export interface MovieState {
   currentMovie: number | null;
   pageSize: number;
   currentPage: number;
-
   currentGenre: string;
   searchQuery: string;
+  currentEditMovie: Movie | null;
   sortColumn: { path: string; order: "asc" | "desc" };
 }
 const initialState: MovieState = {
   currentMovie: null,
   pageSize: 4,
   currentPage: 1,
-
+  currentEditMovie: null,
   currentGenre: "all",
   searchQuery: "",
   sortColumn: { path: "title", order: "asc" },
@@ -40,6 +40,9 @@ const movieSlice = createSlice({
     },
     setCurrentPage(state, action) {
       state.currentPage = action.payload;
+    },
+    setCurrentMovie(state, action) {
+      state.currentEditMovie = action.payload;
     },
   },
 });

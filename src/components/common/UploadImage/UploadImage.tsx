@@ -4,15 +4,23 @@ interface UploadImageProps {
   getImage: (image: string, file: File | null) => void;
   image?: string;
   name?: string;
+  defaultImage?: string;
 }
 
-const UploadImage: React.FC<UploadImageProps> = ({ getImage, image, name }) => {
+const UploadImage: React.FC<UploadImageProps> = ({
+  getImage,
+  name,
+  defaultImage,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [imageUrl, setImage] = useState<string>(image || "");
+  const [imageUrl, setImage] = useState<string>(
+    defaultImage ? defaultImage : ""
+  );
   const [file, setFile] = useState<File | null>(null);
   useEffect(() => {
     getImage(imageUrl, file);
   }, [file, imageUrl]);
+
   return (
     <div
       tabIndex={0}
@@ -24,8 +32,8 @@ const UploadImage: React.FC<UploadImageProps> = ({ getImage, image, name }) => {
       {imageUrl && (
         <img
           src={
-            !image?.includes("blob")
-              ? "http://localhost:5000/" + imageUrl
+            imageUrl && !imageUrl.includes("blob")
+              ? "http://localhost:5000/" + defaultImage
               : imageUrl
           }
           alt="uploadImage"

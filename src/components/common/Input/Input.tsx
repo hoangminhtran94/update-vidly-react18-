@@ -6,8 +6,9 @@ import Form from "react-bootstrap/Form";
 interface InputProps extends FormControlProps {
   name: string;
   label: string;
-  error: string;
+  error?: string;
   type?: string;
+  steps?: string | number;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -16,6 +17,7 @@ const Input: React.FC<InputProps> = ({
   value,
   type,
   error,
+  steps,
   ...rest
 }) => {
   return (
@@ -23,6 +25,7 @@ const Input: React.FC<InputProps> = ({
       <Form.Control
         {...rest}
         as="input"
+        step={steps}
         type={type}
         name={name}
         className="mb-2"

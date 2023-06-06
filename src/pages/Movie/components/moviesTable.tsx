@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Like from "../../../components/common/Like/Like";
 import Table from "../../../components/common/Table/Table";
 import { Movie } from "../../../store/models/Movie.model";
+import MovieModal from "./MovieModal/MovieModal";
+import { useSelector } from "react-redux";
+import { useTypedDispatch } from "../../../store";
+import { movieActions } from "../../../store/movies";
+import { RootState } from "../../../store";
 
 interface MovieTableProps {
   onHandleClick: Function;
@@ -13,7 +17,12 @@ interface MovieTableProps {
 }
 
 const MoviesTable: React.FC<MovieTableProps> = (props) => {
-  const navigate = useNavigate();
+  const currentMovie = useSelector<RootState>(
+    (state) => state.movie.currentEditMovie
+  );
+  const dispatch = useTypedDispatch();
+
+  const [toggleModal, setToggleModal] = useState(false);
   const [columns, setColumn] = useState([
     {
       label: "Title",
@@ -22,22 +31,15 @@ const MoviesTable: React.FC<MovieTableProps> = (props) => {
     { label: "Genre", path: "genre.name" },
     { label: "Stock", path: "numberInStock" },
     { label: "Rate", path: "dailyRentalRate" },
-    {
-      key: "like",
-      content: (movie: Movie) => (
-        <Like
-          isClick={!!movie.isClick}
-          onClick={() => props.onHandleClick(movie)}
-        />
-      ),
-    },
+
     {
       key: "edit",
       content: (movie: Movie) => (
         <button
           className="btn btn-info text-white btn-sm"
           onClick={() => {
-            navigate(`/movies/${movie.id}`);
+            setToggleModal(true);
+            dispatch(movieActions.setCurrentMovie(movie));
           }}
         >
           Edit
@@ -84,12 +86,22 @@ const MoviesTable: React.FC<MovieTableProps> = (props) => {
   const { movie, sortColumn, onSort } = props;
 
   return (
-    <Table
-      columns={columns}
-      data={movie}
-      sortColumn={sortColumn}
-      onSort={onSort}
-    />
+    <>
+      <Table
+        columns={columns}
+        data={movie}
+        sortColumn={sortColumn}
+        onSort={onSort}
+      />
+      <MovieModal
+        toggle={toggleModal}
+        movie={currentMovie as Movie | null}
+        onCancel={() => {
+          setToggleModal(false);
+          dispatch(movieActions.setCurrentMovie(null));
+        }}
+      />
+    </>
   );
 };
 

@@ -19,7 +19,7 @@ import Layout from "./pages/Layout/Layout";
 import LayoutSecondary from "./pages/Layout/LayoutSecondary";
 import LoginForm from "./pages/Login/LoginForm";
 import Customer from "./pages/Customers/Customer";
-import MovieForm from "./pages/Movie/components/MovieForm/MovieForm";
+
 import Rentals from "./pages/Rentals/Rentals";
 import Register from "./pages/Register/RegisterForm";
 import NotFound from "./pages/NotFound/NotFound";
@@ -36,7 +36,6 @@ const router = createBrowserRouter(
       <Route path="/" element={<LayoutSecondary />} loader={homeLoader}>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/movies" element={<Movies />} loader={movieLoader} />
-        <Route path="/movies/:id" element={<MovieForm />} />
         <Route path="/customers" element={<Customer />} />
         <Route path="/rentals" element={<Rentals />} />
         <Route path="/register" element={<Register />} />

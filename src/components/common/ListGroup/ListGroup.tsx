@@ -3,7 +3,7 @@ import { Genre } from "../../../store/models/Movie.model";
 import classes from "./ListGroup.module.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import GenreModal from "./GenreModal/GenreModal";
+import GenreModal from "../../../pages/Movie/components/GenreModal/GenreModal";
 import { useLocation } from "react-router-dom";
 import { User } from "../../../store/models/User.models";
 interface ListGroupProps {

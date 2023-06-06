@@ -10,6 +10,7 @@ interface TextAreaProps {
   onClick?: React.MouseEventHandler;
   onChange?: React.ChangeEventHandler;
   value?: string;
+  defaultValue?: string;
 }
 const TextArea: React.FC<TextAreaProps> = ({
   error,
@@ -19,6 +20,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   value,
   onClick,
   onChange,
+  defaultValue,
 }) => {
   return (
     <FloatingLabel controlId="floatingTextarea2" label={label}>
@@ -26,6 +28,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         id={id}
         name={name}
         value={value}
+        defaultValue={defaultValue}
         as="textarea"
         placeholder="Leave a comment here"
         style={{ minHeight: "100px" }}

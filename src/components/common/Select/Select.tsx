@@ -4,7 +4,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 
 interface SelectProps extends FormSelectProps {
-  error: string;
+  error?: string;
   name: string;
   label: string;
   options: { id: string; name: string }[];

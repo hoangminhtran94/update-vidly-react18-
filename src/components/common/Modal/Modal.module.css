@@ -1,23 +1,20 @@
 .backdrop {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(59, 42, 42, 0.1);
-    z-index: 999;
-   display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(59, 42, 42, 0.1);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .overlay {
-    z-index: 9999;
-    position: absolute;
-    top: calc( 50% - 15vh);
-    left: calc( 50% - 15vw);
-    width: 30vw;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 12px rgb(21, 13, 13,0.1);
-    padding: 16px;
+  z-index: 9999;
+  width: 30vw;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
+  padding: 36px;
 }

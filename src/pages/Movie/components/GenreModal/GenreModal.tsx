@@ -1,12 +1,12 @@
 import Joi from "joi";
 import React, { useEffect, useState } from "react";
-import Modal from "../../Modal/Modal";
+import Modal from "../../../../components/common/Modal/Modal";
 import { Genre } from "../../../../store/models/Movie.model";
 import {
   useAddAGenreMutation,
   useEditAGenreMutation,
 } from "../../../../store/movieApi";
-import Input from "../../Input/Input";
+import Input from "../../../../components/common/Input/Input";
 import classes from "./GenreModal.module.css";
 interface GenreModalProps {
   toggle: boolean;

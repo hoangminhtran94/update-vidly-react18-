@@ -2,37 +2,47 @@ import React from "react";
 import ReactDOM from "react-dom";
 import classes from "./Modal.module.css";
 import { CSSTransition } from "react-transition-group";
-const Backdrop: React.FC<{
-  onClick: React.UIEventHandler;
-}> = ({ onClick }) =>
-  ReactDOM.createPortal(
-    <div onClick={onClick} className={classes["backdrop"]}></div>,
-    document.getElementById("modal-hook")!
-  );
-const ModalBox: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return ReactDOM.createPortal(
-    <div className={classes["overlay"]}>{children}</div>,
-    document.getElementById("modal-hook")!
-  );
-};
+import { useState } from "react";
+
 const Modal: React.FC<{
   toggle: boolean;
   children: React.ReactNode;
   onClick: React.UIEventHandler;
 }> = ({ children, onClick, toggle }) => {
-  return (
-    <>
-      {toggle && <Backdrop onClick={onClick} />}
-      <CSSTransition
-        in={toggle}
-        mountOnEnter
-        unmountOnExit
-        timeout={300}
-        classNames="modal"
-      >
-        <ModalBox>{children}</ModalBox>
-      </CSSTransition>
-    </>
+  const [entered, setEntered] = useState(false);
+  return ReactDOM.createPortal(
+    <CSSTransition
+      key={"modal"}
+      in={toggle}
+      mountOnEnter
+      unmountOnExit
+      timeout={300}
+      classNames="fade"
+      onEntered={() => {
+        setEntered(true);
+      }}
+      onExiting={() => {
+        setEntered(false);
+      }}
+    >
+      <div className={classes["backdrop"]}>
+        <div
+          className=" absolute top-0 left-0 w-full h-full  "
+          onClick={onClick}
+        />
+        <CSSTransition
+          key={"children"}
+          in={entered}
+          mountOnEnter
+          unmountOnExit
+          timeout={300}
+          classNames="modal"
+        >
+          <div className={classes["overlay"]}>{children}</div>
+        </CSSTransition>
+      </div>
+    </CSSTransition>,
+    document.getElementById("modal-hook")!
   );
 };
 export default Modal;

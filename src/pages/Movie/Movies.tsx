@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
@@ -22,6 +22,7 @@ import {
   useDeleteMovieMutation,
   useGetYourMoviesQuery,
 } from "../../store/movieApi";
+import MovieModal from "./components/MovieModal/MovieModal";
 const Movies: React.FC = () => {
   const { data: movies, error } = useGetYourMoviesQuery();
   const { data: genre } = useGetGenresQuery();
@@ -34,6 +35,7 @@ const Movies: React.FC = () => {
     currentMovie,
     sortColumn,
   } = useSelector<RootState, MovieState>((state) => state.movie);
+  const [toggleForm, setToggleForm] = useState(false);
   const currentUser = useSelector<RootState, User>(
     (state) => state.auth.currentUser!
   );
@@ -111,11 +113,14 @@ const Movies: React.FC = () => {
           />
         </div>
         <div className="col">
-          {true && (
-            <Link className="btn btn-primary" to="/movies/new">
-              New movie
-            </Link>
-          )}
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              setToggleForm(true);
+            }}
+          >
+            New movie
+          </button>
 
           {filtered.length === 0 ? (
             <h2 className={classes["invalid-message"]}>
@@ -149,6 +154,12 @@ const Movies: React.FC = () => {
           )}
         </div>
       </div>
+      <MovieModal
+        toggle={toggleForm}
+        onCancel={() => {
+          setToggleForm(false);
+        }}
+      />
     </div>
   );
 };

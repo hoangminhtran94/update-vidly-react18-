@@ -63,9 +63,9 @@ export const movieApiSlice = createApi({
       }),
       invalidatesTags: ["movieData"],
     }),
-    updateAMovie: builder.mutation<any, FormData>({
-      query: (data) => ({
-        url: "movies/edit",
+    updateAMovie: builder.mutation<any, { data: FormData; movieId: string }>({
+      query: ({ data, movieId }) => ({
+        url: "movies/" + movieId,
         method: "POST",
         body: data,
       }),
