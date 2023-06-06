@@ -93,11 +93,15 @@ const Movies: React.FC = () => {
     dispatch(movieActions.setSearchQuery(query));
   };
   if (!movies || !genre) {
-    return <div>Error</div>;
+    return (
+      <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+        <h2 className="">Error happened</h2>
+      </div>
+    );
   }
   return (
-    <div className="container">
-      <div className={`row rounder p-4 ${classes["movies-container"]}`}>
+    <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+      <div className={`row `}>
         <div className="col-3">
           <ListGroup
             genreCount={genre.length}

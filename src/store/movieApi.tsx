@@ -3,7 +3,7 @@ import { Movie, Genre } from "./models/Movie.model";
 import { RootState } from ".";
 export const movieApiSlice = createApi({
   reducerPath: "movieApi",
-  tagTypes: ["movieData", "publicMovieData"],
+  tagTypes: ["movieData", "publicMovieData", "genreData"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SERVER_API,
     prepareHeaders: (headers, { getState }) => {
@@ -27,26 +27,26 @@ export const movieApiSlice = createApi({
       providesTags: ["movieData"],
     }),
     getGenres: builder.query<Genre[], void>({
-      query: () => ({ url: "movies/genre" }),
-      providesTags: ["movieData"],
+      query: () => ({ url: "genre" }),
+      providesTags: ["genreData"],
     }),
     addAGenre: builder.mutation<any, Genre>({
       query: (genre) => ({
-        url: "movies/genre",
+        url: "genre",
         method: "POST",
         body: JSON.stringify(genre),
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: ["movieData"],
+      invalidatesTags: ["genreData"],
     }),
     editAGenre: builder.mutation<any, Genre>({
       query: (genre) => ({
-        url: "movies/genre/" + genre.id,
+        url: "genre/" + genre.id,
         method: "POST",
         body: JSON.stringify({ name: genre.name }),
         headers: { "Content-Type": "application/json" },
       }),
-      invalidatesTags: ["movieData"],
+      invalidatesTags: ["genreData"],
     }),
     deleteMovie: builder.mutation<any, string>({
       query: (id) => ({

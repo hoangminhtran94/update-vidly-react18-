@@ -10,7 +10,7 @@ const Customer: React.FC = () => {
   }>();
 
   return (
-    <div className="container rounded shadow-sm p-4">
+    <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
       <h1>Customers</h1>
       <div>
         {!data || data.length === 0 ? (

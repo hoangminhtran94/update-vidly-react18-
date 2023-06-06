@@ -7,8 +7,9 @@ interface AnimatedBackgroundProps {
 const AnimatedBackground: FC<AnimatedBackgroundProps> = ({ images }) => {
   return (
     <div className="background">
-      {images.map((image) => (
+      {images.map((image, index) => (
         <span
+          key={index}
           style={{ backgroundImage: `url(${image})` }}
           className="bg-cover blur-[2px]"
         ></span>
