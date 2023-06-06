@@ -16,6 +16,7 @@ import { loader as movieLoader } from "./pages/Movie/Movies";
 
 import Movies from "./pages/Movie/Movies";
 import Layout from "./pages/Layout/Layout";
+import LayoutSecondary from "./pages/Layout/LayoutSecondary";
 import LoginForm from "./pages/Login/LoginForm";
 import Customer from "./pages/Customers/Customer";
 import MovieForm from "./pages/Movie/components/MovieForm/MovieForm";
@@ -31,6 +32,8 @@ const router = createBrowserRouter(
     <>
       <Route path="/" element={<Layout />} loader={homeLoader}>
         <Route path="/" element={<Home />} />
+      </Route>
+      <Route path="/" element={<LayoutSecondary />} loader={homeLoader}>
         <Route path="/login" element={<LoginForm />} />
         <Route path="/movies" element={<Movies />} loader={movieLoader} />
         <Route path="/movies/:id" element={<MovieForm />} />

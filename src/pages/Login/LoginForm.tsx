@@ -54,8 +54,10 @@ const LoginForm: React.FC = () => {
     }
   };
   return (
-    <div className={`${classes["login-container"]} p-4 rounded`}>
-      <h1>Login</h1>
+    <div
+      className={`${classes["login-container"]} bg-deep-blue w-1/2 mx-auto my-10 p-4 rounded`}
+    >
+      <h1 className=" text-white">Login</h1>
       <form className={classes["login-form"]} onSubmit={handleSubmit}>
         <Input
           name="userName"
@@ -72,7 +74,7 @@ const LoginForm: React.FC = () => {
           onChange={onChangeHandler}
         />
         <button
-          className="btn btn-primary"
+          className="btn btn-success"
           disabled={
             _.isEqual(initialState, loginData) ||
             !Object.values(errors).every((item) => item === "n/a")

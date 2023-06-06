@@ -44,8 +44,10 @@ const Register: React.FC = () => {
     setImage({ image: image, file: file });
   };
   return (
-    <div className={`${classes["regiter-container"]} p-4 rounded`}>
-      <h1>Register</h1>
+    <div
+      className={`${classes["regiter-container"]} my-10 mx-auto bg-deep-blue p-4 rounded`}
+    >
+      <h1 className="text-white">Register</h1>
       <form className={classes["regiter-form"]} onSubmit={handleSubmit}>
         <UploadImage image={image.image} getImage={chooseImageHandler} />
         <Input name="userName" label="UserName" type="email" error={""} />

@@ -47,19 +47,28 @@ const Rentals = () => {
   });
 
   if (movies && movies.length === 0) {
-    return <h2>There's no movies</h2>;
+    return (
+      <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+        <h2 className="">There's no movies</h2>
+      </div>
+    );
   }
   if (!movies || !genre) {
-    return <div>No data</div>;
-  }
-  if (!filteredMoviesByList) {
-    return <></>;
+    return (
+      <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+        <h2 className="">There's no movies</h2>
+      </div>
+    );
   }
   if (movieIsLoading || genreIsLoading) {
-    return <div>Loading</div>;
+    return (
+      <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
+        <h2 className="">Loading...</h2>
+      </div>
+    );
   }
   return (
-    <div className="container rounded shadow-sm p-4">
+    <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
       <div className="row">
         <h1 className="text-secondary p-3">Rentals</h1>
       </div>
@@ -116,10 +125,10 @@ const Rentals = () => {
 
       <div className="row">
         <div className="grid grid-cols-3 gap-5">
-          {filteredMoviesByList.length === 0 ? (
+          {filteredMoviesByList?.length === 0 ? (
             <h1>No movie available</h1>
           ) : (
-            filteredMoviesByList.map((movie, index) => (
+            filteredMoviesByList?.map((movie, index) => (
               <MovieBox key={index} data={movie} />
             ))
           )}

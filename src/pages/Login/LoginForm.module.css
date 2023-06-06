@@ -1,11 +1,9 @@
 .login-container {
-  width: 50%;
   display: flex;
-  margin: 0 auto;
+  align-self: center;
   flex-direction: column;
   gap: 16px;
-
-  box-shadow: 0 0 12px rgb(21, 13, 13, 0.1);
+  box-shadow: 0 0 12px rgba(245, 245, 245, 0.8);
 }
 .login-form {
   display: flex;
