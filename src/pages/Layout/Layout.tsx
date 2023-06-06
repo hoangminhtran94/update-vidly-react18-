@@ -9,12 +9,12 @@ import { useEffect } from "react";
 import { useTypedDispatch } from "../../store";
 import { getCart } from "../../store/cart";
 import { useDispatch } from "react-redux";
-import ChatBox from "./../../components/ChatBox/ChatBox";
+import ChatBox from "../../components/ChatBox/ChatBox";
 import ChatBoxIcon from "../../components/ChatBoxIcon/ChatBoxIcon";
 import { authActions } from "../../store/auth";
 import "../../App.css";
 import "react-toastify/dist/ReactToastify.css";
-const Home = () => {
+const Layout = () => {
   const loaderData = useLoaderData();
   const dispatch = useDispatch();
   const user = useSelector<RootState, User | null>(
@@ -40,13 +40,13 @@ const Home = () => {
 
       <NavBar user={user} />
 
-      <main className="container-fluid p-4">
+      <main className="">
         <Outlet />
       </main>
     </>
   );
 };
-export default Home;
+export default Layout;
 
 export const loader = async () => {
   const token = localStorage.getItem("token");

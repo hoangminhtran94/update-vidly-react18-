@@ -5,13 +5,15 @@
 body {
   margin: 0;
   padding: 0px 0 0 0;
-  font-family: -apple-system, Blink MacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
   scrollbar-width: none; /* for Firefox */
+}
+
+* {
+  font-family: "Josefin Sans", sans-serif;
 }
 
 *::-webkit-scrollbar {
@@ -25,4 +27,8 @@ code {
 
 .navbar {
   margin-bottom: 30px;
+}
+
+a {
+  text-decoration: none !important;
 }
