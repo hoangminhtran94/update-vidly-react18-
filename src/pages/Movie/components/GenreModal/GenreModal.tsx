@@ -5,7 +5,7 @@ import { Genre } from "../../../../store/models/Movie.model";
 import {
   useAddAGenreMutation,
   useEditAGenreMutation,
-} from "../../../../store/movieApi";
+} from "../../../../store/genreApi";
 import Input from "../../../../components/common/Input/Input";
 import classes from "./GenreModal.module.css";
 interface GenreModalProps {
@@ -32,7 +32,7 @@ const GenreModal: React.FC<GenreModalProps> = ({
   const [editAGenre, { isLoading: editIsLoading }] = useEditAGenreMutation();
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    const name = e.target as HTMLFormElement;
+    const name = (e.target as HTMLFormElement).get;
     console.log(name);
     // if (data) {
     //   await editAGenre(genreData);

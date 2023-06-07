@@ -56,6 +56,5 @@ export const logoutAndClearCache = (): ThunkAction<
     dispatch(customerApi.util.resetApiState());
     dispatch(cartApiSlice.util.resetApiState());
     dispatch(movieApiSlice.util.resetApiState());
-    dispatch(movieApiSlice.util.invalidateTags(["publicMovieData"]));
   };
 };

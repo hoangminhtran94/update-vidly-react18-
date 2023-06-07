@@ -5,7 +5,8 @@ import { RootState } from "../../store";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
 import { useDispatch } from "react-redux";
 import { movieActions } from "../../store/movies";
-import { useGetGenresQuery, useGetMoviesQuery } from "../../store/movieApi";
+import { useGetGenresQuery } from "../../store/genreApi";
+import { useGetMoviesQuery } from "../../store/rentalApi";
 import { Button, Form } from "react-bootstrap";
 import { User } from "../../store/models/User.models";
 const Rentals = () => {

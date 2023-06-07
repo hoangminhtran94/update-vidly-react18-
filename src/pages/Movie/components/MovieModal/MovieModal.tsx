@@ -15,10 +15,9 @@ import TextArea from "../../../../components/common/TextArea/TextArea";
 import UploadImage from "../../../../components/common/UploadImage/UploadImage";
 import { User } from "../../../../store/models/User.models";
 import { toast } from "react-toastify";
+import { useGetGenresQuery } from "../../../../store/genreApi";
 import {
   useAddAMovieMutation,
-  useGetGenresQuery,
-  useGetMoviesQuery,
   useUpdateAMovieMutation,
 } from "../../../../store/movieApi";
 import Modal from "../../../../components/common/Modal/Modal";

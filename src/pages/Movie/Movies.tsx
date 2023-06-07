@@ -16,9 +16,8 @@ import { Movie } from "./../../store/models/Movie.model";
 import { movieActions } from "../../store/movies";
 import classes from "./Movies.module.css";
 import { User } from "../../store/models/User.models";
+import { useGetGenresQuery } from "../../store/genreApi";
 import {
-  useGetGenresQuery,
-  useGetMoviesQuery,
   useDeleteMovieMutation,
   useGetYourMoviesQuery,
 } from "../../store/movieApi";
