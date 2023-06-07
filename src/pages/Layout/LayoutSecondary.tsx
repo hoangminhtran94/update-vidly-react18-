@@ -1,6 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import NavBar from "./components/NavBar";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet, redirect, useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { User } from "../../store/models/User.models";
@@ -15,7 +15,7 @@ import "../../App.css";
 import "react-toastify/dist/ReactToastify.css";
 import AnimatedBackground from "./components/AnimateBackground";
 const LayoutSecondary = () => {
-  const loaderData = useLoaderData();
+  const userData = useLoaderData();
   const dispatch = useDispatch();
   const user = useSelector<RootState, User | null>(
     (state) => state.auth.currentUser
@@ -23,11 +23,9 @@ const LayoutSecondary = () => {
   const toggle = useSelector<RootState, boolean>(
     (state) => state.chatbox.toggle
   );
-  const dispatchThunk = useTypedDispatch();
-
   useEffect(() => {
-    if (loaderData) {
-      dispatch(authActions.login(loaderData));
+    if (userData) {
+      dispatch(authActions.login(userData));
     }
   }, []);
   const images = [
@@ -63,3 +61,21 @@ const LayoutSecondary = () => {
   );
 };
 export default LayoutSecondary;
+
+export const loader = async () => {
+  const token = localStorage.getItem("token");
+  let user = null;
+  try {
+    const data = await fetch("http://localhost:5000/api/user/validate-token", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    user = await data.json();
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (user && token) {
+    return { user: user, token: token };
+  }
+  return null;
+};

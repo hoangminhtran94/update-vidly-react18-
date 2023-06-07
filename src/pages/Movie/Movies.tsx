@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import MoviesTable from "./components/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +26,7 @@ import MovieModal from "./components/MovieModal/MovieModal";
 const Movies: React.FC = () => {
   const { data: movies, error } = useGetYourMoviesQuery();
   const { data: genre } = useGetGenresQuery();
+  const navigate = useNavigate();
   const [deleteMovie] = useDeleteMovieMutation();
   const {
     currentGenre,
@@ -39,6 +40,7 @@ const Movies: React.FC = () => {
   const currentUser = useSelector<RootState, User>(
     (state) => state.auth.currentUser!
   );
+
   const dispatch = useDispatch();
 
   const handleDelete = async (movieId: string) => {

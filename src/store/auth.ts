@@ -2,6 +2,8 @@ import { AnyAction, createSlice, ThunkAction } from "@reduxjs/toolkit";
 import { User } from "./models/User.models";
 import { RootState } from ".";
 import { customerApi } from "./orderApi";
+import { movieApiSlice } from "./movieApi";
+import { cartApiSlice } from "./cartApi";
 interface AuthState {
   currentUser: User | null;
   token: string | null;
@@ -28,6 +30,20 @@ const authSlice = createSlice({
 export const authActions = authSlice.actions;
 export default authSlice.reducer;
 
+export const loginWithCache = ({
+  user,
+  token,
+}: {
+  user: User;
+  token: string;
+}): ThunkAction<Promise<any>, RootState, any, AnyAction> => {
+  return async (dispatch) => {
+    dispatch(authActions.login({ user: user, token: token }));
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+};
+
 export const logoutAndClearCache = (): ThunkAction<
   void,
   RootState,
@@ -38,5 +54,8 @@ export const logoutAndClearCache = (): ThunkAction<
     localStorage.clear();
     dispatch(authActions.logout());
     dispatch(customerApi.util.resetApiState());
+    dispatch(cartApiSlice.util.resetApiState());
+    dispatch(movieApiSlice.util.resetApiState());
+    dispatch(movieApiSlice.util.invalidateTags(["publicMovieData"]));
   };
 };

@@ -6,7 +6,6 @@ import { RootState } from "../../store";
 import { User } from "../../store/models/User.models";
 import CartSideBar from "../Rentals/components/CartSideBar/CartSideBar";
 import { useEffect } from "react";
-import { useTypedDispatch } from "../../store";
 import { useDispatch } from "react-redux";
 import ChatBox from "../../components/ChatBox/ChatBox";
 import ChatBoxIcon from "../../components/ChatBoxIcon/ChatBoxIcon";
@@ -45,21 +44,3 @@ const Layout = () => {
   );
 };
 export default Layout;
-
-export const loader = async () => {
-  const token = localStorage.getItem("token");
-  let user = null;
-  try {
-    const data = await fetch("http://localhost:5000/api/user/validate-token", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    user = await data.json();
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (user && token) {
-    return { user: user, token: token };
-  }
-  return null;
-};

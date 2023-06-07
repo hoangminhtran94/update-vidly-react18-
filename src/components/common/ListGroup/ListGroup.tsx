@@ -22,6 +22,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
   const { genre, genreCount, currentGenre, onGenreChange } = props;
   const [data, setData] = useState<Genre | undefined>();
   const [toggleModal, setToggleModal] = useState(false);
+  console.log(data);
   return (
     <ul className="list-group">
       <li
@@ -42,7 +43,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
           All Genre
         </p>
       </li>
-      {genre.map((g) => (
+      {genre.map((g, index) => (
         <li
           key={g.id}
           className={`${
@@ -64,7 +65,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
 
           {user && location.pathname !== "/rentals" && (
             <span
-              className={classes["edit-icon"]}
+              className={`${classes["edit-icon"]} cursor-pointer hover:scale-[130%] transition-all  `}
               onClick={() => {
                 setToggleModal(true);
                 setData(g);
@@ -74,7 +75,7 @@ const ListGroup: React.FC<ListGroupProps> = (props) => {
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"
                 height="12"
-                fill="currentColor"
+                fill="#383636f"
                 className="bi bi-pencil"
                 viewBox="0 0 16 16"
               >

@@ -10,6 +10,8 @@ import { RootState } from "../../store";
 import { User } from "../../store/models/User.models";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "../../store/authApi";
+import { useTypedDispatch } from "../../store";
+import { loginWithCache } from "./../../store/auth";
 const schema: { [key: string]: any } = {
   userName: Joi.string().required().email({ tlds: false }).label("Username"),
   password: Joi.string().required().label("Password"),
@@ -21,6 +23,8 @@ const LoginForm: React.FC = () => {
   const [errors, setErrors] = useState({ userName: "", password: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const typedDispatch = useTypedDispatch();
+
   const validateProperty = ({
     name,
     value,
@@ -45,9 +49,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     try {
       const { user, token } = await login(loginData).unwrap();
-      dispatch(authActions.login({ user: user, token: token }));
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      await typedDispatch(loginWithCache({ user, token }));
       navigate("/movies");
     } catch (error: any) {
       toast(error.data.message, { type: "error" });
