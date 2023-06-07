@@ -1,6 +1,8 @@
+import { redirect, useNavigate } from "react-router-dom";
 import { Order } from "../../store/models/Order.model";
 import { useGetYourOrdersQuery } from "../../store/orderApi";
 import YourOrderItem from "./components/OrderItems/YourOrderItem";
+
 const YourOrders = () => {
   const { data, error } = useGetYourOrdersQuery<{
     data: Order[];
@@ -39,3 +41,21 @@ const YourOrders = () => {
 };
 
 export default YourOrders;
+
+export const loader = async () => {
+  const token = localStorage.getItem("token");
+  let user = null;
+  try {
+    const data = await fetch("http://localhost:5000/api/user/validate-token", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    user = await data.json();
+  } catch (e) {
+    return redirect("/");
+  }
+
+  if (!user || !token) {
+    return redirect("/login");
+  }
+  return null;
+};

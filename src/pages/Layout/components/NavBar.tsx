@@ -107,6 +107,7 @@ const NavBar: React.FC<{ user: User | null }> = ({ user }) => {
                   <NavDropdown.Item
                     onClick={() => {
                       dispatchThunk(logoutAndClearCache());
+                      navigate("/login");
                     }}
                   >
                     <p className="nav-item nav-link text-secondary m-0">

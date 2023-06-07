@@ -9,6 +9,7 @@ import { useGetGenresQuery } from "../../store/genreApi";
 import { useGetMoviesQuery } from "../../store/rentalApi";
 import { Button, Form } from "react-bootstrap";
 import { User } from "../../store/models/User.models";
+
 const Rentals = () => {
   const dispatch = useDispatch();
   const [filterValue, setFilterValue] = useState("availableMovies");

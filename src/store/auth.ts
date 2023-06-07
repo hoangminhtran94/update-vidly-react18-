@@ -4,6 +4,7 @@ import { RootState } from ".";
 import { customerApi } from "./orderApi";
 import { movieApiSlice } from "./movieApi";
 import { cartApiSlice } from "./cartApi";
+import { authApiSlice } from "./authApi";
 interface AuthState {
   currentUser: User | null;
   token: string | null;
@@ -53,6 +54,7 @@ export const logoutAndClearCache = (): ThunkAction<
   return (dispatch) => {
     localStorage.clear();
     dispatch(authActions.logout());
+    dispatch(authApiSlice.util.resetApiState());
     dispatch(customerApi.util.resetApiState());
     dispatch(cartApiSlice.util.resetApiState());
     dispatch(movieApiSlice.util.resetApiState());

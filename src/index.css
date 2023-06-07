@@ -13,6 +13,13 @@
     @apply bg-gradient-to-r from-slate-50 to-red-50 shadow-md;
   }
 }
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 
 body {
   margin: 0;

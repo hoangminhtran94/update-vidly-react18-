@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
-import { redirect, useNavigate } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import MoviesTable from "./components/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,10 +22,12 @@ import {
   useGetYourMoviesQuery,
 } from "../../store/movieApi";
 import MovieModal from "./components/MovieModal/MovieModal";
+import { Navigate } from "react-router-dom";
+import { useGetCartItemsQuery } from "../../store/cartApi";
 const Movies: React.FC = () => {
   const { data: movies, error } = useGetYourMoviesQuery();
   const { data: genre } = useGetGenresQuery();
-  const navigate = useNavigate();
+  useGetCartItemsQuery();
   const [deleteMovie] = useDeleteMovieMutation();
   const {
     currentGenre,
@@ -95,6 +97,7 @@ const Movies: React.FC = () => {
   const handleSearch = (query: string) => {
     dispatch(movieActions.setSearchQuery(query));
   };
+
   if (!movies || !genre) {
     return (
       <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
@@ -102,6 +105,9 @@ const Movies: React.FC = () => {
       </div>
     );
   }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   return (
     <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white">
       <div className={`row `}>
@@ -182,5 +188,5 @@ export const loader = async () => {
   if (!user || !token) {
     return redirect("/login");
   }
-  return null;
+  return user;
 };

@@ -8,10 +8,23 @@ export const authApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_SERVER_API,
     prepareHeaders: (headers, { getState }) => {
+      let token = (getState() as RootState).auth.token;
+      if (!token) {
+        token = localStorage.getItem("token");
+      }
+      if (token) {
+        headers.set("authorization", `Bearer ${token}`);
+      }
       return headers;
     },
   }),
   endpoints: (builder) => ({
+    getAuth: builder.query<User | null, void>({
+      query: () => ({
+        url: "user/validate-token",
+      }),
+      providesTags: ["authData"],
+    }),
     login: builder.mutation<
       { user: User; token: string },
       { userName: string; password: string }
@@ -31,4 +44,5 @@ export const authApiSlice = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApiSlice;
+export const { useGetAuthQuery, useLoginMutation, useRegisterMutation } =
+  authApiSlice;

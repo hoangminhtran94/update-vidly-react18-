@@ -15,19 +15,13 @@ import "../../App.css";
 import "react-toastify/dist/ReactToastify.css";
 import AnimatedBackground from "./components/AnimateBackground";
 const LayoutSecondary = () => {
-  const userData = useLoaderData();
-  const dispatch = useDispatch();
   const user = useSelector<RootState, User | null>(
     (state) => state.auth.currentUser
   );
   const toggle = useSelector<RootState, boolean>(
     (state) => state.chatbox.toggle
   );
-  useEffect(() => {
-    if (userData) {
-      dispatch(authActions.login(userData));
-    }
-  }, []);
+
   const images = [
     "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_.jpg",
     "https://m.media-amazon.com/images/I/71lvJthCRtL.jpg",
@@ -61,21 +55,3 @@ const LayoutSecondary = () => {
   );
 };
 export default LayoutSecondary;
-
-export const loader = async () => {
-  const token = localStorage.getItem("token");
-  let user = null;
-  try {
-    const data = await fetch("http://localhost:5000/api/user/validate-token", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    user = await data.json();
-  } catch (e) {
-    console.log(e);
-  }
-
-  if (user && token) {
-    return { user: user, token: token };
-  }
-  return null;
-};

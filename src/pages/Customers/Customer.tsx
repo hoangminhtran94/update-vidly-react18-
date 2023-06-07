@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetCustomerOrdersQuery } from "../../store/orderApi";
 import CustomerOrderItem from "./CustomerOrderItem/CustomerOrderItem";
 import { Order } from "../../store/models/Order.model";
+import { redirect, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 
 const Customer: React.FC = () => {
+  const loaderData = useLoaderData();
   const { data, error } = useGetCustomerOrdersQuery<{
     data: Order[];
     error: any;
   }>();
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loaderData) {
+      navigate("/login");
+    }
+  }, []);
   return (
     <div className=" bg-[rgba(255,255,255,0.8)] flex-1 p-10  shadow-xl shadow-white text-slate-600">
       <h1>Customers</h1>
@@ -40,3 +48,21 @@ const Customer: React.FC = () => {
 };
 
 export default Customer;
+
+export const loader = async () => {
+  const token = localStorage.getItem("token");
+  let user = null;
+  try {
+    const data = await fetch("http://localhost:5000/api/user/validate-token", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    user = await data.json();
+  } catch (e) {
+    return redirect("/");
+  }
+
+  if (!user || !token) {
+    return redirect("/login");
+  }
+  return user;
+};

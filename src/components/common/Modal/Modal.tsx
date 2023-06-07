@@ -5,10 +5,11 @@ import { CSSTransition } from "react-transition-group";
 import { useState } from "react";
 
 const Modal: React.FC<{
+  className?: string;
   toggle: boolean;
   children: React.ReactNode;
   onClick: React.UIEventHandler;
-}> = ({ children, onClick, toggle }) => {
+}> = ({ children, onClick, toggle, className }) => {
   const [entered, setEntered] = useState(false);
   return ReactDOM.createPortal(
     <CSSTransition
@@ -38,7 +39,7 @@ const Modal: React.FC<{
           timeout={300}
           classNames="modal"
         >
-          <div className={classes["overlay"]}>{children}</div>
+          <div className={`${classes["overlay"]} ${className}`}>{children}</div>
         </CSSTransition>
       </div>
     </CSSTransition>,
