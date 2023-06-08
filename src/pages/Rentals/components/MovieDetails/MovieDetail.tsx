@@ -1,7 +1,8 @@
 import Modal from "../../../../components/common/Modal/Modal";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Movie } from "../../../../store/models/Movie.model";
-
+import { usePostCartItemMutation } from "../../../../store/cartApi";
+import { useState } from "react";
 interface MovieDetailProps {
   movie: Movie;
   toggle: boolean;
@@ -9,6 +10,23 @@ interface MovieDetailProps {
 }
 
 const MovieDetail: FC<MovieDetailProps> = ({ movie, toggle, onCancel }) => {
+  const [postCartItem] = usePostCartItemMutation();
+  const [itemNumber, setItemNumber] = useState(0);
+  const [bounce, setBounce] = useState(false);
+  useEffect(() => {
+    let timeout: NodeJS.Timeout | null = null;
+    if (itemNumber >= 0 || itemNumber <= 20) {
+      setBounce(true);
+      timeout = setTimeout(() => {
+        setBounce(false);
+      }, 200);
+    }
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [itemNumber]);
   return (
     <Modal
       toggle={toggle}
@@ -45,25 +63,67 @@ const MovieDetail: FC<MovieDetailProps> = ({ movie, toggle, onCancel }) => {
           <h4>About</h4>
           <p>{movie.description}</p>
         </div>
-        <div className="flex-1  font-extrabold p-4">
+        <div className=" flex gap-3 flex-col flex-1  font-extrabold p-4">
           <h4>Number in stock: {movie.numberInStock}</h4>
           <h4>Rental price: ${movie.dailyRentalRate}/day</h4>
-          <h4>Total price: $</h4>
-          <div className="flex transition-all">
-            <span className="w-[40px] h-[40px] bg-slate-100 flex justify-center items-center hover:scale-105 cursor-pointer">
-              -
-            </span>
-            <input
-              defaultValue={"0"}
-              type="number"
-              min={0}
-              max={20}
-              className="w-[40px] h-[40px] p-[10px] border border-slate-100    hover:scale-105 cursor-pointer"
-            />
+          <h4>Total price: ${itemNumber * +movie.dailyRentalRate}</h4>
+          <div className="flex gap-5 items-center">
+            <div className="flex transition-all">
+              <button
+                className="w-[40px] h-[40px] bg-slate-100 flex justify-center items-center hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  setItemNumber((prev) => {
+                    if (prev - 1 >= 0) {
+                      return prev - 1;
+                    }
+                    return 0;
+                  });
+                }}
+              >
+                -
+              </button>
+              <input
+                defaultValue={"0"}
+                type="number"
+                min={0}
+                max={+movie.numberInStock}
+                value={itemNumber}
+                onChange={(e) => {
+                  if (
+                    +e.target.value >= 0 &&
+                    +e.target.value <= +movie.numberInStock
+                  ) {
+                    setItemNumber(+e.target.value);
+                  }
+                }}
+                className={`w-[40px] h-[40px] p-1  border border-slate-100  text-center  hover:scale-105 cursor-pointer ${
+                  bounce && "bounce"
+                }`}
+              />
 
-            <span className="w-[40px] h-[40px] bg-slate-100  flex justify-center items-center hover:scale-105 cursor-pointer">
-              +
-            </span>
+              <button
+                className="w-[40px] h-[40px] bg-slate-100  flex justify-center items-center hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  setItemNumber((prev) => {
+                    if (prev + 1 <= +movie.numberInStock) {
+                      return prev + 1;
+                    }
+
+                    return +movie.numberInStock;
+                  });
+                }}
+              >
+                +
+              </button>
+            </div>
+            <button
+              className="bg-[#242368] text-[20px] font-bold text-white p-3 hover:bg-[#302f72] hover:scale-105 transition-all  rounded-full  !w-fit"
+              onClick={() => {
+                postCartItem({ movieId: movie.id, quantity: itemNumber });
+              }}
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </div>

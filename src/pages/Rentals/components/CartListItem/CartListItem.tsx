@@ -41,45 +41,53 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
           </svg>
         </Button>
       </div>
-      <div className="row mx-0">
-        <div className="col-3">
-          <div className={classes["cart-item-image"]}>
-            <img
-              src={"http://localhost:5000/" + item.movie.image}
-              alt="cartImage"
-              className="rounded"
-            />
+      <div className="flex gap-2">
+        <div className="w-[60px] h-full">
+          <img
+            src={"http://localhost:5000/" + item.movie.image}
+            alt="cartImage"
+            className="rounded w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="flex-1">
+          <div className="grid grid-cols-3 gap-2 text-center ">
+            <p className="fw-bold">Title</p>
+            <p className="fw-bold">Quantity</p>
+            <p className="fw-bold mb-2">Price</p>
           </div>
-        </div>
-        <div className="col-4">
-          <p className="fw-bold mb-2">Title</p>
-          <p className="m-0">{item.movie.title}</p>
-        </div>
-        <div className="col-3 p-0">
-          <p className="fw-bold mb-2">Quantity</p>
-          <div className={classes["quantity-form-group"] + " d-flex rounded"}>
-            <button
-              className={`${classes["substitute-button"]}`}
-              onClick={() => {
-                postCartItem({ movieId: item.movieId, quantity: -1 });
-              }}
-            >
-              -
-            </button>
-            <input className="form-control m-0 mx-0" value={item.quantity} />
-            <button
-              className={`${classes["increment-button"]}`}
-              onClick={() => {
-                postCartItem({ movieId: item.movieId, quantity: 1 });
-              }}
-            >
-              +
-            </button>
+          <div className="grid grid-cols-3 gap-2 text-center items-center">
+            <div className="">
+              <p className="m-0">{item.movie.title}</p>
+            </div>
+            <div className="flex items-start">
+              <button
+                className="w-[40px] h-[40px] bg-slate-100  flex justify-center items-center hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  postCartItem({ movieId: item.movieId, quantity: -1 });
+                }}
+              >
+                -
+              </button>
+              <input
+                className="w-[40px] h-[40px] p-1  border border-slate-100  text-center  hover:scale-105 cursor-pointer "
+                value={item.quantity}
+              />
+              <button
+                className="w-[40px] h-[40px] bg-slate-100  flex justify-center items-center hover:scale-105 cursor-pointer"
+                onClick={() => {
+                  postCartItem({ movieId: item.movieId, quantity: 1 });
+                }}
+              >
+                +
+              </button>
+            </div>
+            <div className="">
+              <p className="m-0">
+                ${item.quantity! * item.movie.dailyRentalRate}
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="col-2">
-          <p className="fw-bold mb-2">Price</p>
-          <p className="m-0">${item.quantity! * item.movie.dailyRentalRate}</p>
         </div>
       </div>
     </div>

@@ -244,3 +244,22 @@ a {
   animation-delay: -3s;
   transform-origin: 11vw 19vh;
 }
+
+.bounce {
+  animation: bounce 200ms ease-in-out;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(1.2);
+  }
+  66% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

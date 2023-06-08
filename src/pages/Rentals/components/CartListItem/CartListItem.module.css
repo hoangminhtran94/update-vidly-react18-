@@ -11,27 +11,17 @@
   object-fit: cover;
 }
 
-/* .substitute-button {
+.substitute-button {
   width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
   justify-content: center;
   align-items: center;
-  padding: 0 !important;
-  line-height: 0 !important;
 }
 .increment-button {
   width: 20px;
-  height: 20px;
-  min-width: 20px;
-  min-height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 !important;
-  line-height: 0 !important;
-} */
+}
 .quantity-form-group {
   border: 1px solid rgb(151, 151, 151, 0.1);
   height: 30px;
