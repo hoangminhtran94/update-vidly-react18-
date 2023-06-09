@@ -23,7 +23,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
       {type === "send" && (
         <div className="col-1">
           <Image
-            src={"http://localhost:5000/" + sender?.image}
+            src={process.env.REACT_APP_SERVER_URL! + sender?.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm"}
           />
@@ -54,7 +54,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
         <div className="col-1 d-flex justify-content-center">
           <Image
             src={
-              "http://localhost:5000/" +
+              process.env.REACT_APP_SERVER_URL! +
               users.find((user) => user.id === message.senderId)?.image
             }
             roundedCircle

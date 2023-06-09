@@ -24,7 +24,7 @@ export const orderApiSlice = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getCustomerOrders: builder.query<CustomerOrder[], void>({
+    getCustomerOrders: builder.query<Order[], void>({
       query: (args) => ({ url: "/customers" }),
       providesTags: ["customerData"],
     }),
