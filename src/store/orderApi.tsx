@@ -32,7 +32,37 @@ export const customerApi = createApi({
       query: (args) => ({ url: "/" }),
       providesTags: ["yourOrders"],
     }),
+    changeYourOrderStatus: builder.mutation<
+      void,
+      { status: string; orderId: string }
+    >({
+      query: (args) => ({
+        url: `/${args.orderId}/update-your-order`,
+        method: "POST",
+        body: JSON.stringify({ orderStatus: args.status }),
+        headers: { "Content-Type": "application/json" },
+      }),
+
+      invalidatesTags: ["yourOrders"],
+    }),
+    changeOrderStatus: builder.mutation<
+      void,
+      { status: string; orderId: string }
+    >({
+      query: (args) => ({
+        url: `/${args.orderId}/change-status`,
+        method: "POST",
+        body: JSON.stringify({ orderStatus: args.status }),
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["customerData"],
+    }),
   }),
 });
 
-export const { useGetCustomerOrdersQuery, useGetYourOrdersQuery } = customerApi;
+export const {
+  useGetCustomerOrdersQuery,
+  useGetYourOrdersQuery,
+  useChangeYourOrderStatusMutation,
+  useChangeOrderStatusMutation,
+} = customerApi;

@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState, useRef } from "react";
 import { Button, Image } from "react-bootstrap";
 import Modal from "../../../../components/common/Modal/Modal";
+import { useChangeYourOrderStatusMutation } from "../../../../store/orderApi";
 
 import classes from "./YourOrderItem.module.css";
 import { Order } from "../../../../store/models/Order.model";
@@ -10,6 +11,7 @@ interface CustomerOrderItemProps {
 }
 const YourOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
   const [toggleViewCustomer, setToggleViewCustomer] = useState(false);
+  const [updateOrder] = useChangeYourOrderStatusMutation();
   if (data.orderItems.length === 0) {
     return <h2>Not available</h2>;
   }
@@ -21,7 +23,7 @@ const YourOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
           <div className="row d-flex">
             <div className="col-1  d-flex align-items-center">
               <Image
-                className=" w-[50px] !h-[50px]   object-cover"
+                className=" w-[80px] !h-[80px]   object-cover"
                 src={"http://localhost:5000/" + item.movie.image}
                 rounded
                 thumbnail

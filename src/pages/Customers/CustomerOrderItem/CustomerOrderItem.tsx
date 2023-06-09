@@ -3,6 +3,7 @@ import { Button, Image } from "react-bootstrap";
 import Modal from "../../../components/common/Modal/Modal";
 
 import classes from "./CustomerOrderItem.module.css";
+import { useChangeOrderStatusMutation } from "../../../store/orderApi";
 import { Order } from "../../../store/models/Order.model";
 
 interface CustomerOrderItemProps {
@@ -10,6 +11,7 @@ interface CustomerOrderItemProps {
 }
 const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
   const [toggleViewCustomer, setToggleViewCustomer] = useState(false);
+  const [updateOrder] = useChangeOrderStatusMutation();
   if (data.orderItems.length === 0) {
     return <h2>Not available</h2>;
   }
@@ -17,11 +19,11 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
   return (
     <>
       {data.orderItems.map((item) => (
-        <li key={item.id} className="container shadow-sm p-3 mb-4 rounded">
+        <li key={item.id} className="p-2">
           <div className="row d-flex">
             <div className="col-1  d-flex align-items-center">
               <Image
-                className="shadow-sm h-100"
+                className=" w-[80px] !h-[80px]   object-cover"
                 src={"http://localhost:5000/" + item.movie.image}
                 rounded
                 thumbnail
@@ -58,12 +60,62 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               }
               style={{ gap: "8px", flexWrap: "wrap" }}
             >
-              <Button variant="success" size="sm">
-                Ship
-              </Button>
-              <Button variant="danger" size="sm">
-                Cancel
-              </Button>
+              {data.orderStatus.id === "pending" && (
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "confirmed" });
+                  }}
+                >
+                  Confirm order
+                </Button>
+              )}
+              {data.orderStatus.id === "confirmed" && (
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "shipping" });
+                  }}
+                >
+                  Ship
+                </Button>
+              )}
+              {data.orderStatus.id === "shipping" && (
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "shipped" });
+                  }}
+                >
+                  Shipped
+                </Button>
+              )}
+              {data.orderStatus.id === "shipped" && (
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "finished" });
+                  }}
+                >
+                  Shipped
+                </Button>
+              )}
+
+              {data.orderStatus.id === "pending" && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "declined" });
+                  }}
+                >
+                  Decline order
+                </Button>
+              )}
             </div>
           </div>
         </li>

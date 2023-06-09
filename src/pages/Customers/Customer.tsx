@@ -25,8 +25,9 @@ const Customer: React.FC = () => {
           <h2>There's no customer</h2>
         ) : (
           data.map((item) => (
-            <ul key={item.id}>
-              <li className="container mb-3 fw-bold">
+            <ul key={item.id} className="container shadow-sm p-3 mb-4 rounded">
+              <li className="text-xs font-bold mb-3">Order id: {item.id}</li>
+              <li className="container  text-sm font-bold bg-slate-100">
                 <div className="row">
                   <div className="col-1"></div>
                   <div className="col-2">Movie</div>
