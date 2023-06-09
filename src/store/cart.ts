@@ -1,5 +1,8 @@
 import { createSlice, ThunkAction, AnyAction } from "@reduxjs/toolkit";
 import { CartItem } from "./models/CartItem.modules";
+import { RootState } from ".";
+import { rentalApiSlice } from "./rentalApi";
+import { orderApiSlice } from "./orderApi";
 
 export interface CartState {
   cartItems: CartItem[];
@@ -23,3 +26,15 @@ const cartSlice = createSlice({
 
 export const cartActions = cartSlice.actions;
 export default cartSlice.reducer;
+
+export const updateRelatedState = (): ThunkAction<
+  void,
+  RootState,
+  any,
+  AnyAction
+> => {
+  return (dispatch) => {
+    dispatch(rentalApiSlice.util.invalidateTags(["publicMovieData"]));
+    dispatch(orderApiSlice.util.invalidateTags(["yourOrders"]));
+  };
+};

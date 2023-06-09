@@ -49,7 +49,13 @@ const YourOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               {item.movie.owner!.username}
             </div>
             <div className="col-1 d-flex align-items-center text-success fw-bold">
-              <p className={classes["status"] + " m-0"}>
+              <p
+                className={`${classes["status"]} m-0 ${
+                  (data.orderStatus.id === "cancelled" ||
+                    data.orderStatus.id === "declined") &&
+                  "!text-red-400"
+                }`}
+              >
                 {data.orderStatus.name}
               </p>
             </div>
@@ -62,9 +68,17 @@ const YourOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
               <Button variant="success" size="sm">
                 Contact seller
               </Button>
-              <Button variant="danger" size="sm">
-                Cancel order
-              </Button>
+              {data.orderStatus.id === "pending" && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => {
+                    updateOrder({ orderId: data.id, status: "cancelled" });
+                  }}
+                >
+                  Cancel order
+                </Button>
+              )}
             </div>
           </div>
         </li>

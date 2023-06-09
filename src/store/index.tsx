@@ -6,7 +6,7 @@ import {
   Reducer,
 } from "@reduxjs/toolkit";
 import { movieApiSlice } from "./movieApi";
-import { customerApi } from "./orderApi";
+import { orderApiSlice } from "./orderApi";
 import { useSelector, useDispatch } from "react-redux";
 import movieReducer from "./movies";
 import authReducer from "./auth";
@@ -29,7 +29,7 @@ const combinedReducer = combineReducers({
   cart: cartReducer,
   chatbox: chatboxReducer,
   [movieApiSlice.reducerPath]: movieApiSlice.reducer,
-  [customerApi.reducerPath]: customerApi.reducer,
+  [orderApiSlice.reducerPath]: orderApiSlice.reducer,
   [authApiSlice.reducerPath]: authApiSlice.reducer,
   [messageApiSlice.reducerPath]: messageApiSlice.reducer,
   [cartApiSlice.reducerPath]: cartApiSlice.reducer,
@@ -57,7 +57,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(movieApiSlice.middleware)
-      .concat(customerApi.middleware)
+      .concat(orderApiSlice.middleware)
       .concat(authApiSlice.middleware)
       .concat(messageApiSlice.middleware)
       .concat(cartApiSlice.middleware)

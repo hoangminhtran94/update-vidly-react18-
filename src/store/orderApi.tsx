@@ -7,7 +7,7 @@ import { CustomerOrder, User } from "./models/User.models";
 import { RootState } from ".";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 import { Order } from "./models/Order.model";
-export const customerApi = createApi({
+export const orderApiSlice = createApi({
   reducerPath: "customerApi",
   tagTypes: ["customerData", "yourOrders"],
   baseQuery: fetchBaseQuery({
@@ -65,4 +65,4 @@ export const {
   useGetYourOrdersQuery,
   useChangeYourOrderStatusMutation,
   useChangeOrderStatusMutation,
-} = customerApi;
+} = orderApiSlice;

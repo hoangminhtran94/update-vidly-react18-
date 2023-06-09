@@ -1,7 +1,7 @@
 import { AnyAction, createSlice, ThunkAction } from "@reduxjs/toolkit";
 import { User } from "./models/User.models";
 import { RootState } from ".";
-import { customerApi } from "./orderApi";
+import { orderApiSlice } from "./orderApi";
 import { movieApiSlice } from "./movieApi";
 import { cartApiSlice } from "./cartApi";
 import { authApiSlice } from "./authApi";
@@ -55,7 +55,7 @@ export const logoutAndClearCache = (): ThunkAction<
     localStorage.clear();
     dispatch(authActions.logout());
     dispatch(authApiSlice.util.resetApiState());
-    dispatch(customerApi.util.resetApiState());
+    dispatch(orderApiSlice.util.resetApiState());
     dispatch(cartApiSlice.util.resetApiState());
     dispatch(movieApiSlice.util.resetApiState());
   };

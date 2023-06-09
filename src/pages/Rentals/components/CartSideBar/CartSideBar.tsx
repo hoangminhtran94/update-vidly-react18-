@@ -8,6 +8,8 @@ import { cartActions } from "../../../../store/cart";
 import { CartItem } from "../../../../store/models/CartItem.modules";
 import CartListItem from "../CartListItem/CartListItem";
 import classes from "./CartSideBar.module.css";
+import { updateRelatedState } from "../../../../store/cart";
+import { useTypedDispatch } from "../../../../store";
 
 import {
   useCheckoutMutation,
@@ -15,6 +17,7 @@ import {
 } from "../../../../store/cartApi";
 const CartSideBar: React.FC = () => {
   const dispatch = useDispatch();
+  const dispatchThunk = useTypedDispatch();
 
   const toggle = useSelector<RootState, boolean>((state) => state.cart.toggle);
   const { data, error } = useGetCartItemsQuery<{
@@ -50,7 +53,8 @@ const CartSideBar: React.FC = () => {
               classes["checkout-button"] + " w-50 d-flex align-items-center"
             }
             onClick={async () => {
-              checkout();
+              await checkout();
+              dispatchThunk(updateRelatedState());
             }}
             style={{ gap: "8px" }}
           >
