@@ -1,12 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Message } from "./models/Message.modules";
+import { ChatList, Message, MessageRoom } from "./models/Message.modules";
 import { RootState } from ".";
+import { User } from "./models/User.models";
 
 export const messageApiSlice = createApi({
   reducerPath: "messageApi",
-  tagTypes: ["messagesData"],
+  tagTypes: ["messagesData", "chatlist"],
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.REACT_APP_SERVER_API,
+    baseUrl: process.env.REACT_APP_SERVER_API + "messages",
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
@@ -17,15 +18,19 @@ export const messageApiSlice = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getMessages: builder.mutation<Message[], string>({
-      query: (roomId) => ({
-        url: "messages/",
-        body: JSON.stringify({ roomId: roomId }),
-        method: "POST",
+    getMessages: builder.query<MessageRoom, string>({
+      query: (receiverId) => ({
+        url: `/${receiverId}`,
       }),
-      invalidatesTags: ["messagesData"],
+      providesTags: ["messagesData"],
+    }),
+    getChatList: builder.query<ChatList[], void>({
+      query: () => ({
+        url: "/chat-list",
+      }),
+      providesTags: ["chatlist"],
     }),
   }),
 });
 
-export const { useGetMessagesMutation } = messageApiSlice;
+export const { useGetChatListQuery, useGetMessagesQuery } = messageApiSlice;

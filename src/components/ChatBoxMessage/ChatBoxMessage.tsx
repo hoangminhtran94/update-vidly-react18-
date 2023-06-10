@@ -6,21 +6,19 @@ import { RootState } from "../../store";
 import { User } from "../../store/models/User.models";
 import { Message } from "../../store/models/Message.modules";
 interface ChatBoxMessageProps {
-  type: "send" | "receive";
   message: Message;
-  users: User[];
+  receiver: User;
 }
 const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
-  type,
   message,
-  users,
+  receiver,
 }) => {
   const sender = useSelector<RootState, User | null>(
     (state) => state.auth.currentUser
   );
   return (
     <div className={classes["chatbox"] + " rounded"}>
-      {type === "send" && (
+      {message.senderId === sender?.id && (
         <div className="col-1">
           <Image
             src={process.env.REACT_APP_SERVER_URL! + sender?.image}
@@ -31,7 +29,9 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
       )}
       <div
         className={`col-11 shadow-sm p-2 ${classes["chatbox-message"]} ${
-          type === "send" ? classes["send-message"] : classes["receive-message"]
+          message.senderId === sender?.id
+            ? classes["send-message"]
+            : classes["receive-message"]
         }`}
       >
         <p className={classes["message-row"] + " pb-2"}>{message.message}</p>
@@ -50,13 +50,10 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
           </svg>
         </p>
       </div>
-      {type === "receive" && (
+      {message.receiverId === receiver?.id && (
         <div className="col-1 d-flex justify-content-center">
           <Image
-            src={
-              process.env.REACT_APP_SERVER_URL! +
-              users.find((user) => user.id === message.senderId)?.image
-            }
+            src={process.env.REACT_APP_SERVER_URL! + receiver.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm"}
           />
