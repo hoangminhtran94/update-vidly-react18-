@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import Table from "../../../components/common/Table/Table";
 import { Movie } from "../../../store/models/Movie.model";
 import MovieModal from "./MovieModal/MovieModal";

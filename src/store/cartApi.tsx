@@ -37,6 +37,7 @@ export const cartApiSlice = createApi({
         url: "/checkout",
         method: "POST",
       }),
+      
       invalidatesTags: ["cartData"],
     }),
     deleteCartItem: builder.mutation<any, string>({
