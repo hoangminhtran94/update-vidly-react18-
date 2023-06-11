@@ -19,30 +19,22 @@ const GenreModal: React.FC<GenreModalProps> = ({
   setToggleModal,
   data,
 }) => {
-  // const [genreData, setGenreData] = useState({ id: "", name: "" });
-  // const [errors, setErrors] = useState<{ [key: string]: string }>({
-  //   name: "",
-  // });
-  // useEffect(() => {
-  //   if (data) {
-  //     setGenreData(data);
-  //   }
-  // }, [data]);
   const [addAGenre, { isLoading }] = useAddAGenreMutation();
   const [editAGenre, { isLoading: editIsLoading }] = useEditAGenreMutation();
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    const name = (e.target as HTMLFormElement).get;
-    console.log(name);
-    // if (data) {
-    //   await editAGenre(genreData);
-    // } else {
-    //   await addAGenre(genreData);
-    // }
+    const formData = new FormData(e.target as HTMLFormElement);
+    const name = formData.get("name");
 
-    // if (!isLoading || !editIsLoading) {
-    //   setToggleModal(false);
-    // }
+    if (data) {
+      await editAGenre({ id: data.id, name: name as string });
+    } else {
+      await addAGenre(name as string);
+    }
+
+    if (!isLoading || !editIsLoading) {
+      setToggleModal(false);
+    }
   };
 
   return (

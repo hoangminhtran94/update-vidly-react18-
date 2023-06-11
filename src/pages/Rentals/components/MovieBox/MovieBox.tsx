@@ -31,7 +31,7 @@ const MovieBox: React.FC<MovieBoxProps> = ({ data }) => {
         />
         <div className="d-flex justify-content-center flex-col gap-2 justify-between">
           <div className={classes["image-container"]}>
-            <img alt="movieImage" src={`http://localhost:5000/${data.image}`} />
+            <img alt="movieImage" src={data.image} />
           </div>
           <p className={classes["price"]}>${data.dailyRentalRate}/day</p>
           <p>{data.numberInStock} in stock</p>

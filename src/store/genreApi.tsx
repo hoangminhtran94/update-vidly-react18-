@@ -22,11 +22,11 @@ export const genreApiSlice = createApi({
       query: () => ({ url: "genre" }),
       providesTags: ["genreData"],
     }),
-    addAGenre: builder.mutation<any, Genre>({
+    addAGenre: builder.mutation<any, string>({
       query: (genre) => ({
         url: "genre",
         method: "POST",
-        body: JSON.stringify(genre),
+        body: JSON.stringify({ name: genre }),
         headers: { "Content-Type": "application/json" },
       }),
       invalidatesTags: ["genreData"],

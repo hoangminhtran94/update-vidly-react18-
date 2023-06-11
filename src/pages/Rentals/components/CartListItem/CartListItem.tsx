@@ -44,7 +44,7 @@ const CartListItem: React.FC<CartItemProps> = ({ item }) => {
       <div className="flex gap-2">
         <div className="w-[60px] h-full">
           <img
-            src={"http://localhost:5000/" + item.movie.image}
+            src={item.movie.image}
             alt="cartImage"
             className="rounded w-full h-full object-cover"
           />

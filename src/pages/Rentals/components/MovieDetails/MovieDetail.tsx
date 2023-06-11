@@ -43,7 +43,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ movie, toggle, onCancel }) => {
         <div className="flex-1 basis-[100px] overflow-hidden shadow-md">
           <img
             className="w-full h-full  rounded-tl-md object-cover "
-            src={"http://localhost:5000/" + movie.image}
+            src={movie.image}
             alt={movie.image}
           />
         </div>
@@ -51,7 +51,7 @@ const MovieDetail: FC<MovieDetailProps> = ({ movie, toggle, onCancel }) => {
           <div className="flex gap-5 p-[40px] h-fit items-center ">
             <img
               className="w-[140px] h-[140px] rounded-full shadow-md object-cover"
-              src={"http://localhost:5000/" + movie.owner?.image}
+              src={movie.owner?.image}
               alt={movie.owner?.image}
             />
             <div className="flex flex-col gap-2 text-lg font-bold ">

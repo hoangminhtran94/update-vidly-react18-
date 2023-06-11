@@ -24,7 +24,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
             <div className="col-1  d-flex align-items-center">
               <Image
                 className=" w-[80px] !h-[80px]   object-cover"
-                src={"http://localhost:5000/" + item.movie.image}
+                src={item.movie.image}
                 rounded
                 thumbnail
               />
@@ -140,7 +140,7 @@ const CustomerOrderItem: React.FC<CustomerOrderItemProps> = ({ data }) => {
             <div className="col-4">
               <Image
                 className="shadow-sm"
-                src={"http://localhost:5000/" + data.shoppingCart.owner.image}
+                src={data.shoppingCart.owner.image}
                 rounded
                 fluid
               />

@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./ChatBoxIcon.module.css";
+
 import { useDispatch } from "react-redux";
 import { chatboxActions } from "./../../store/chatbox";
 const ChatBoxIcon: React.FC = () => {
@@ -9,7 +9,7 @@ const ChatBoxIcon: React.FC = () => {
       onClick={() => {
         dispatch(chatboxActions.setToggleChatBox());
       }}
-      className={classes["chatbox-icon"] + " shadow rounded-circle"}
+      className=" bg-white fixed right-[2%] bottom-[2%] w-20 h-20 flex justify-center items-center cursor-pointer shadow rounded-circle"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

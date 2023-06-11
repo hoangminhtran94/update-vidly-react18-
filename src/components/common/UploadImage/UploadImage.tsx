@@ -31,11 +31,7 @@ const UploadImage: React.FC<UploadImageProps> = ({
     >
       {imageUrl && (
         <img
-          src={
-            imageUrl && !imageUrl.includes("blob")
-              ? "http://localhost:5000/" + defaultImage
-              : imageUrl
-          }
+          src={imageUrl && !imageUrl.includes("blob") ? defaultImage : imageUrl}
           alt="uploadImage"
         />
       )}

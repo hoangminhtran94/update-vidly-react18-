@@ -46,9 +46,12 @@ export const loader = async () => {
   const token = localStorage.getItem("token");
   let user = null;
   try {
-    const data = await fetch("http://localhost:5000/api/user/validate-token", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const data = await fetch(
+      process.env.REACT_APP_SERVER_API + "user/validate-token",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     user = await data.json();
   } catch (e) {
     return redirect("/");

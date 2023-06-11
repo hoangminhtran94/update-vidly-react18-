@@ -1,6 +1,4 @@
 import { FC, useEffect, useRef, useState } from "react";
-import classes from "./ChatBoxMessage.moduel.css";
-import { ChatList, Message } from "../../store/models/Message.modules";
 import ChatBoxMessage from "../ChatBoxMessage/ChatBoxMessage";
 import { messageApiSlice, useGetMessagesQuery } from "../../store/messageApi";
 import { Button, Form } from "react-bootstrap";
@@ -23,6 +21,8 @@ const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
   useEffect(() => {
     if (isSuccess) {
       dispatch(messageApiSlice.util.invalidateTags(["chatlist"]));
+      socket.emit("join-room", messageRoomData.roomId);
+      socket.emit("read-message", messageRoomData.roomId);
     }
     if (messageRoomData?.children?.length! > 0) {
       messageBoxRef.current?.scrollIntoView({
@@ -30,7 +30,13 @@ const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
         block: "end",
       });
     }
-  }, [dispatch, isSuccess, messageRoomData?.children?.length]);
+  }, [
+    dispatch,
+    isSuccess,
+    messageRoomData?.children?.length,
+    messageRoomData?.roomId,
+    socket,
+  ]);
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const [chatInput, setChatInput] = useState<string>("");
 
@@ -55,7 +61,12 @@ const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              socket.emit("send-message", chatInput, receiver.id);
+              socket.emit(
+                "send-message",
+                chatInput,
+                receiver.id,
+                messageRoomData?.roomId
+              );
               setChatInput("");
             }
           }}

@@ -16,4 +16,5 @@ export interface MessageRoom {
 export interface ChatList {
   user: User;
   roomId: string;
+  unreadCounter: number;
 }

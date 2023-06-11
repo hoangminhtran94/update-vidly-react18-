@@ -38,7 +38,14 @@ const ChatBox = () => {
       console.log("connected");
     });
     socket.on("receive-message", (message: Message) => {
-      dispatch(messageApiSlice.util.invalidateTags(["messagesData"]));
+      dispatch(
+        messageApiSlice.util.invalidateTags(["messagesData", "chatlist"])
+      );
+    });
+    socket.on("message-read", () => {
+      dispatch(
+        messageApiSlice.util.invalidateTags(["messagesData", "chatlist"])
+      );
     });
     return () => {
       socket.off("connect");
@@ -88,10 +95,10 @@ const ChatBox = () => {
             ) : (
               chatlist.map((list, index) => (
                 <ChatListItem
+                  socket={socket}
                   onClick={async () => {
                     try {
                       dispatch(chatboxActions.setCurrentReceiver(list.user));
-                      socket.emit("join-room", list.roomId);
                     } catch {}
                   }}
                   chatList={list}

@@ -5,6 +5,7 @@ import { orderApiSlice } from "./orderApi";
 import { movieApiSlice } from "./movieApi";
 import { cartApiSlice } from "./cartApi";
 import { authApiSlice } from "./authApi";
+import { messageApiSlice } from "./messageApi";
 interface AuthState {
   currentUser: User | null;
   token: string | null;
@@ -40,6 +41,7 @@ export const loginWithCache = ({
 }): ThunkAction<Promise<any>, RootState, any, AnyAction> => {
   return async (dispatch) => {
     dispatch(authActions.login({ user: user, token: token }));
+    console.log(user);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
   };
@@ -58,5 +60,6 @@ export const logoutAndClearCache = (): ThunkAction<
     dispatch(orderApiSlice.util.resetApiState());
     dispatch(cartApiSlice.util.resetApiState());
     dispatch(movieApiSlice.util.resetApiState());
+    dispatch(messageApiSlice.util.resetApiState());
   };
 };
