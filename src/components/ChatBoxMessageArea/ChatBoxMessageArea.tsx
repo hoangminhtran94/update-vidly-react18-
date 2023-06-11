@@ -1,39 +1,50 @@
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import classes from "./ChatBoxMessage.moduel.css";
 import { ChatList, Message } from "../../store/models/Message.modules";
 import ChatBoxMessage from "../ChatBoxMessage/ChatBoxMessage";
-import { useGetMessagesQuery } from "../../store/messageApi";
+import { messageApiSlice, useGetMessagesQuery } from "../../store/messageApi";
 import { Button, Form } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { User } from "../../store/models/User.models";
+import { useDispatch } from "react-redux";
+import { io } from "socket.io-client";
 
 interface ChatBoxMessageAreaProps {
-  chatlist: ChatList;
+  receiver: User;
   socket: Socket;
 }
 
 const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
-  chatlist,
+  receiver,
   socket,
 }) => {
-  const { data: messageRoomData } = useGetMessagesQuery(chatlist.roomId);
+  const { data: messageRoomData, isSuccess } = useGetMessagesQuery(receiver.id);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(messageApiSlice.util.invalidateTags(["chatlist"]));
+    }
+    if (messageRoomData?.children?.length! > 0) {
+      messageBoxRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [dispatch, isSuccess, messageRoomData?.children?.length]);
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const [chatInput, setChatInput] = useState<string>("");
+
   return (
-    <div className={classes["chax-box"]}>
-      <div className={classes["content-row"]}>
-        {/* Render Image*/}
-        {messageRoomData?.messages.map((message, index) => (
-          <ChatBoxMessage
-            key={index}
-            receiver={chatlist.user}
-            message={message}
-          />
+    <div className="flex-1 flex flex-col">
+      <div className="flex flex-col overflow-y-scroll gap-2 px-2 py-4 flex-1">
+        <p>{`Messaging with: ${receiver.firstName} ${receiver.lastName}`}</p>
+        {messageRoomData?.children.map((message, index) => (
+          <ChatBoxMessage key={index} receiver={receiver} message={message} />
         ))}
         <div style={{ height: 0 }} ref={messageBoxRef}></div>
         {/* <ChatBoxMessage type="receive" /> */}
       </div>
-      <div className={classes["action-row"]}>
+      <div className="border-t border-t-slate-100 flex p-2">
         <Form.Control
           name="Input"
           as="input"
@@ -42,12 +53,23 @@ const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
           onChange={(e) => {
             setChatInput(e.target.value);
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              socket.emit("send-message", chatInput, receiver.id);
+              setChatInput("");
+            }
+          }}
         />
         <Button
           className="d-flex align-items-center"
           disabled={!chatInput}
           onClick={() => {
-            socket.emit("send-message", chatInput);
+            socket.emit(
+              "send-message",
+              chatInput,
+              receiver.id,
+              messageRoomData?.roomId
+            );
             setChatInput("");
           }}
         >

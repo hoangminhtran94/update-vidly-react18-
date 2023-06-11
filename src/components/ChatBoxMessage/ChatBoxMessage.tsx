@@ -13,15 +13,15 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
   message,
   receiver,
 }) => {
-  const sender = useSelector<RootState, User | null>(
+  const currentUser = useSelector<RootState, User | null>(
     (state) => state.auth.currentUser
   );
   return (
     <div className={classes["chatbox"] + " rounded"}>
-      {message.senderId === sender?.id && (
+      {message.senderId === currentUser?.id && (
         <div className="col-1">
           <Image
-            src={process.env.REACT_APP_SERVER_URL! + sender?.image}
+            src={process.env.REACT_APP_SERVER_URL! + currentUser?.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm"}
           />
@@ -29,7 +29,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
       )}
       <div
         className={`col-11 shadow-sm p-2 ${classes["chatbox-message"]} ${
-          message.senderId === sender?.id
+          message.senderId === currentUser?.id
             ? classes["send-message"]
             : classes["receive-message"]
         }`}
@@ -50,7 +50,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
           </svg>
         </p>
       </div>
-      {message.receiverId === receiver?.id && (
+      {message.senderId === receiver?.id && (
         <div className="col-1 d-flex justify-content-center">
           <Image
             src={process.env.REACT_APP_SERVER_URL! + receiver.image}

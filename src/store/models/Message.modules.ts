@@ -10,7 +10,7 @@ export interface Message {
 
 export interface MessageRoom {
   roomId: string;
-  messages: Message[];
+  children: Message[];
 }
 
 export interface ChatList {

@@ -1,62 +1,56 @@
-import { Form } from "react-bootstrap";
-import classes from "./ChatBox.module.css";
 import Button from "react-bootstrap/Button";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { chatboxActions } from "./../../store/chatbox";
-import ChatBoxMessage from "../ChatBoxMessage/ChatBoxMessage";
 import { io } from "socket.io-client";
 import { useEffect, useState, useMemo, useRef } from "react";
-import { useGetCustomerOrdersQuery } from "../../store/orderApi";
-import { CustomerOrder, User } from "../../store/models/User.models";
-import { Image } from "react-bootstrap";
 import { ChatList, Message } from "../../store/models/Message.modules";
-import { Order } from "../../store/models/Order.model";
-import { useGetChatListQuery } from "../../store/messageApi";
+import { messageApiSlice, useGetChatListQuery } from "../../store/messageApi";
 import ChatBoxMessageArea from "../ChatBoxMessageArea/ChatBoxMessageArea";
+import ChatListItem from "../ChatListItem/ChatListItem";
+import { User } from "../../store/models/User.models";
+import { uniqueId } from "lodash";
 const ChatBox = () => {
-  const [currentChatList, setCurrentChatList] = useState<ChatList | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
   const { data: chatlist, error } = useGetChatListQuery();
   const toggle = useSelector<RootState, boolean>(
     (state) => state.chatbox.toggle
   );
-  const messageBoxRef = useRef<HTMLDivElement>(null);
-  const currentUser = useSelector<RootState, User | null>(
-    (state) => state.auth.currentUser
+  const currentReceiver = useSelector<RootState, User | null>(
+    (state) => state.chatbox.currentReceiver
   );
+
   const token = useSelector<RootState, string | null>(
     (state) => state.auth.token
   );
   const socket = useMemo(
-    () => io(process.env.REACT_APP_SERVER_URL!, { auth: { token: token } }),
+    () =>
+      io(process.env.REACT_APP_SERVER_URL!, {
+        auth: { token: token },
+      }),
     [token]
   );
 
   const dispatch = useDispatch();
-  const { data } = useGetCustomerOrdersQuery<{
-    data: Order[];
-  }>();
 
   useEffect(() => {
     socket.on("connect", () => {
       console.log("connected");
     });
     socket.on("receive-message", (message: Message) => {
-      setMessages((prev) => [...prev, message]);
+      dispatch(messageApiSlice.util.invalidateTags(["messagesData"]));
     });
     return () => {
       socket.off("connect");
       socket.off("receive-message");
     };
-  }, [socket]);
+  }, [dispatch, socket]);
 
-  useEffect(() => {
-    messageBoxRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [messages.length]);
+  // useEffect(() => {
+  //   messageBoxRef.current?.scrollIntoView({
+  //     behavior: "smooth",
+  //   });
+  // }, []);
   return (
     <CSSTransition
       in={toggle}
@@ -65,13 +59,8 @@ const ChatBox = () => {
       unmountOnExit
       mountOnEnter
     >
-      <div className={classes["chat-box-container"] + " shadow rounded"}>
-        <div
-          className={
-            classes["header-row"] +
-            " bg-secondary p-2 text-white d-flex justify-content-between"
-          }
-        >
+      <div className=" fixed right-[3%] bottom-[3%] flex flex-col w-[500px] h-[500px] overflow-hidden bg-white shadow rounded z-[99999999]">
+        <div className="h-[10%] box-border bg-secondary p-2 text-white d-flex justify-content-between">
           <p className="m-0"> Chat box</p>
           <Button
             className="h-25"
@@ -82,39 +71,32 @@ const ChatBox = () => {
             }}
           ></Button>
         </div>
-        <div className={classes["chat-area-container"]}>
-          {!currentChatList ? (
-            <div className={classes["chatbox-placeholder"]}>
+        <div className="flex h-[90%]">
+          {!currentReceiver ? (
+            <div className="flex-1 flex justify-center items-center">
               Click on customer to chat
             </div>
           ) : (
-            <ChatBoxMessageArea socket={socket} chatlist={currentChatList} />
+            <ChatBoxMessageArea socket={socket} receiver={currentReceiver} />
           )}
 
-          <div className={classes["chat-list"]}>
+          <div className="w-[30%] border-l border-l-slate-100 p-3 overflow-scroll flex  flex-col gap-3 ">
             {!chatlist ? (
               <p>Loading</p>
+            ) : chatlist.length === 0 ? (
+              <p>There is no previous chat</p>
             ) : (
               chatlist.map((list, index) => (
-                <div
-                  key={index}
-                  className={
-                    classes["chat-list-item"] +
-                    " d-flex rounded shadow-sm p-2 my-2 mx-1"
-                  }
+                <ChatListItem
                   onClick={async () => {
                     try {
-                      setCurrentChatList(list);
+                      dispatch(chatboxActions.setCurrentReceiver(list.user));
                       socket.emit("join-room", list.roomId);
                     } catch {}
                   }}
-                >
-                  <Image
-                    src={process.env.REACT_APP_SERVER_URL + list.user.image}
-                    className={classes["chat-list-icon"] + " rounded me-2"}
-                  />
-                  <p className="m-0">{list.user.firstName}</p>
-                </div>
+                  chatList={list}
+                  key={uniqueId()}
+                />
               ))
             )}
           </div>
