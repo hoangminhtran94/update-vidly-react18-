@@ -4,7 +4,7 @@ import Pagination from "../../components/common/Pagination/Pagination";
 import { paginate } from "../../utils/paginate";
 import ListGroup from "../../components/common/ListGroup/ListGroup";
 import { redirect, useLoaderData } from "react-router-dom";
-import MoviesTable from "./components/MoviesTable";
+import MoviesTable from "./components/MovieTable/MoviesTable";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";

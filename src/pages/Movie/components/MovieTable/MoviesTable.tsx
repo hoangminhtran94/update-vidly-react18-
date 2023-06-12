@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../../components/common/Table/Table";
-import { Movie } from "../../../store/models/Movie.model";
-import MovieModal from "./MovieModal/MovieModal";
+import Table from "../../../../components/common/Table/Table";
+import { Movie } from "../../../../store/models/Movie.model";
+import MovieModal from "../MovieModal/MovieModal";
 import { useSelector } from "react-redux";
-import { useTypedDispatch } from "../../../store";
-import { movieActions } from "../../../store/movies";
-import { RootState } from "../../../store";
+import { useTypedDispatch } from "../../../../store";
+import { movieActions } from "../../../../store/movies";
+import { RootState } from "../../../../store";
 
 interface MovieTableProps {
   onHandleClick: Function;
