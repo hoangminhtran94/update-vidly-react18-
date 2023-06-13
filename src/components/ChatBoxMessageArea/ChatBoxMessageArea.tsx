@@ -5,7 +5,7 @@ import { Button, Form } from "react-bootstrap";
 import { Socket } from "socket.io-client";
 import { User } from "../../store/models/User.models";
 import { useDispatch } from "react-redux";
-import { io } from "socket.io-client";
+import { uniqueId } from "lodash";
 
 interface ChatBoxMessageAreaProps {
   receiver: User;
@@ -45,7 +45,11 @@ const ChatBoxMessageArea: FC<ChatBoxMessageAreaProps> = ({
       <div className="flex flex-col overflow-y-scroll gap-2 px-2 py-4 flex-1">
         <p>{`Messaging with: ${receiver.firstName} ${receiver.lastName}`}</p>
         {messageRoomData?.children.map((message, index) => (
-          <ChatBoxMessage key={index} receiver={receiver} message={message} />
+          <ChatBoxMessage
+            key={uniqueId()}
+            receiver={receiver}
+            message={message}
+          />
         ))}
         <div style={{ height: 0 }} ref={messageBoxRef}></div>
         {/* <ChatBoxMessage type="receive" /> */}

@@ -130,8 +130,8 @@ const Rentals = () => {
           {filteredMoviesByList?.length === 0 ? (
             <h1>No movie available</h1>
           ) : (
-            filteredMoviesByList?.map((movie, index) => (
-              <MovieBox key={index} data={movie} />
+            filteredMoviesByList?.map((movie) => (
+              <MovieBox key={movie.id} data={movie} />
             ))
           )}
         </div>

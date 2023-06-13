@@ -10,7 +10,7 @@ import CartListItem from "../CartListItem/CartListItem";
 import classes from "./CartSideBar.module.css";
 import { updateRelatedState } from "../../../../store/cart";
 import { useTypedDispatch } from "../../../../store";
-
+import { uniqueId } from "lodash";
 import {
   useCheckoutMutation,
   useGetCartItemsQuery,
@@ -44,7 +44,9 @@ const CartSideBar: React.FC = () => {
         {data?.length === 0 ? (
           <h2>No items in to cart</h2>
         ) : (
-          data?.map((item, index) => <CartListItem key={index} item={item} />)
+          data?.map((item, index) => (
+            <CartListItem key={uniqueId()} item={item} />
+          ))
         )}
         {data?.length > 0 && (
           <Button
