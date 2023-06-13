@@ -22,7 +22,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
       {mode === "send" && (
         <div className="col-1">
           <Image
-            src={process.env.REACT_APP_SERVER_URL! + currentUser?.image}
+            src={currentUser?.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm object-cover"}
           />
@@ -85,7 +85,7 @@ const ChatBoxMessage: React.FC<ChatBoxMessageProps> = ({
       {mode === "receive" && (
         <div className="col-1 d-flex justify-content-center">
           <Image
-            src={process.env.REACT_APP_SERVER_URL! + receiver.image}
+            src={receiver.image}
             roundedCircle
             className={classes["image-icon"] + " shadow-sm object-cover"}
           />

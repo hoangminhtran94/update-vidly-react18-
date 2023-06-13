@@ -17,7 +17,7 @@ const ChatListItem: FC<{
       onClick={onClick}
     >
       <Image
-        src={process.env.REACT_APP_SERVER_URL + chatList.user.image}
+        src={chatList.user.image}
         className=" rounded-full me-2 w-[30px] h-[30px] object-cover"
       />
       <p className="m-0 text-xs">{chatList.user.firstName}</p>
